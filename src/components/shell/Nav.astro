@@ -1,0 +1,434 @@
+---
+import Emblem from '@/components/ui/Emblem.astro';
+import Button from '@/components/ui/Button.astro';
+import LangSwitch from '@/components/ui/LangSwitch.astro';
+import { nav } from '@/config/nav';
+import { t, localizedPath, type Locale } from '@/lib/i18n';
+import { orderWaLink } from '@/lib/links';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const home = localizedPath(locale);
+const orderHref = orderWaLink(locale);
+---
+
+<header class="nav" data-nav>
+  <div class="nav__bar container">
+    <a class="nav__logo" href={home} aria-label="DASTUR — home">
+      <Emblem variant="wordmark" tone="current" locale={locale} />
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <ul role="list">
+        {
+          nav.map((item) => (
+            <li>
+              <a class="nav__link" href={`#${item.id}`} data-navlink={item.id}>
+                {t(locale, item.key)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="nav__actions">
+      <LangSwitch locale={locale} class="nav__lang" />
+      <Button href={orderHref} variant="primary" magnetic external class="nav__order">
+        {t(locale, 'nav.orderNow')}
+      </Button>
+      <button
+        class="nav__toggle"
+        type="button"
+        aria-controls="nav-drawer"
+        aria-expanded="false"
+        aria-label={t(locale, 'a11y.openMenu')}
+      >
+        <span class="nav__toggle-bars"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label={t(locale, 'nav.home')} hidden>
+  <div class="drawer__backdrop" data-drawer-close></div>
+  <div class="drawer__panel">
+    <div class="drawer__top">
+      <Emblem variant="icon" tone="sand" locale={locale} class="drawer__mark" />
+      <button
+        class="drawer__close"
+        type="button"
+        data-drawer-close
+        aria-label={t(locale, 'a11y.closeMenu')}
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+    </div>
+    <nav class="drawer__nav" aria-label="Mobile">
+      <ul role="list">
+        {
+          nav.map((item, i) => (
+            <li style={`--i:${i}`}>
+              <a class="drawer__link" href={`#${item.id}`} data-drawer-link>
+                <span class="drawer__num">{String(i + 1).padStart(2, '0')}</span>
+                {t(locale, item.key)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="drawer__foot">
+      <LangSwitch locale={locale} />
+      <Button href={orderHref} variant="primary" external class="drawer__order">
+        {t(locale, 'nav.orderNow')}
+      </Button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-nav]');
+  const toggle = document.querySelector<HTMLButtonElement>('.nav__toggle');
+  const drawer = document.getElementById('nav-drawer');
+
+  // --- Scrolled state ---
+  if (header) {
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        header.classList.toggle('is-scrolled', window.scrollY > 48);
+        ticking = false;
+      });
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  // --- Active section indication ---
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('[data-navlink]'),
+  );
+  const byId = new Map(links.map((l) => [l.dataset.navlink, l]));
+  const sections = links
+    .map((l) => document.getElementById(l.dataset.navlink!))
+    .filter((el): el is HTMLElement => !!el);
+  if (sections.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            links.forEach((l) => l.removeAttribute('aria-current'));
+            const active = byId.get(e.target.id);
+            if (active) active.setAttribute('aria-current', 'true');
+          }
+        });
+      },
+      { rootMargin: '-45% 0px -50% 0px', threshold: 0 },
+    );
+    sections.forEach((s) => io.observe(s));
+  }
+
+  // --- Drawer (accessible dialog with focus trap) ---
+  if (toggle && drawer) {
+    const closers = drawer.querySelectorAll<HTMLElement>('[data-drawer-close]');
+    const drawerLinks = drawer.querySelectorAll<HTMLAnchorElement>('[data-drawer-link]');
+    let lastFocused: HTMLElement | null = null;
+
+    const focusable = () =>
+      Array.from(
+        drawer.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((el) => el.offsetParent !== null);
+
+    const open = () => {
+      lastFocused = document.activeElement as HTMLElement;
+      drawer.hidden = false;
+      requestAnimationFrame(() => drawer.classList.add('is-open'));
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      const f = focusable();
+      if (f.length) f[0].focus();
+      document.addEventListener('keydown', onKey);
+    };
+    const close = () => {
+      drawer.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
+      window.setTimeout(() => {
+        drawer.hidden = true;
+      }, 320);
+      if (lastFocused) lastFocused.focus();
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        close();
+        return;
+      }
+      if (e.key === 'Tab') {
+        const f = focusable();
+        if (!f.length) return;
+        const first = f[0];
+        const last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    toggle.addEventListener('click', open);
+    closers.forEach((c) => c.addEventListener('click', close));
+    drawerLinks.forEach((l) => l.addEventListener('click', close));
+  }
+</script>
+
+<style>
+  .nav {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: var(--z-nav);
+    color: var(--sand);
+    transition:
+      background-color var(--dur-3) var(--ease-out),
+      box-shadow var(--dur-3) var(--ease-out),
+      color var(--dur-3) var(--ease-out);
+  }
+  .nav.is-scrolled {
+    background: color-mix(in srgb, var(--paper) 86%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    backdrop-filter: blur(14px) saturate(1.1);
+    color: var(--oud-ink);
+    box-shadow: 0 1px 0 var(--hairline);
+  }
+
+  .nav__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: var(--nav-h);
+  }
+  .nav__logo {
+    flex-shrink: 0;
+    width: clamp(120px, 14vw, 152px);
+    color: currentColor;
+  }
+  .nav__logo :global(.emblem__word) {
+    max-width: 100%;
+  }
+
+  .nav__links {
+    display: none;
+  }
+  .nav__links ul {
+    display: flex;
+    gap: clamp(1rem, 2vw, 2.1rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav__link {
+    position: relative;
+    font-size: var(--fs-small);
+    letter-spacing: 0.04em;
+    padding-block: 0.5rem;
+    color: currentColor;
+    opacity: 0.85;
+    transition: opacity var(--dur-1) var(--ease-out);
+  }
+  [lang='ar'] .nav__link {
+    letter-spacing: 0;
+  }
+  .nav__link::after {
+    content: '';
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: var(--u-origin, left);
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+  [dir='rtl'] .nav__link {
+    --u-origin: right;
+  }
+  .nav__link:hover,
+  .nav__link[aria-current='true'] {
+    opacity: 1;
+  }
+  .nav__link:hover::after,
+  .nav__link[aria-current='true']::after {
+    transform: scaleX(1);
+  }
+
+  .nav__actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .nav__lang {
+    display: none;
+  }
+  .nav__order {
+    display: none;
+  }
+
+  .nav__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: currentColor;
+  }
+  .nav__toggle-bars {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 24px;
+  }
+  .nav__toggle-bars span {
+    height: 1.5px;
+    width: 100%;
+    background: currentColor;
+    border-radius: 2px;
+  }
+  .nav__toggle-bars span:nth-child(2) {
+    width: 70%;
+  }
+  [dir='rtl'] .nav__toggle-bars span:nth-child(2) {
+    margin-inline-start: auto;
+  }
+
+  /* --- Drawer --- */
+  .drawer {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-drawer);
+  }
+  .drawer__backdrop {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--oud-900) 55%, transparent);
+    opacity: 0;
+    transition: opacity var(--dur-3) var(--ease-out);
+  }
+  .drawer.is-open .drawer__backdrop {
+    opacity: 1;
+  }
+  .drawer__panel {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: min(88vw, 400px);
+    background: var(--indigo);
+    color: var(--sand);
+    padding: 1.5rem clamp(1.5rem, 5vw, 2.5rem) 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    transform: translateX(100%);
+    transition: transform var(--dur-3) var(--ease-emph);
+    overflow-y: auto;
+  }
+  [dir='rtl'] .drawer__panel {
+    transform: translateX(-100%);
+  }
+  .drawer.is-open .drawer__panel {
+    transform: translateX(0);
+  }
+  .drawer__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .drawer :global(.drawer__mark) {
+    width: 42px;
+    height: auto;
+  }
+  .drawer__close {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sand);
+  }
+  .drawer__nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .drawer__link {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    padding: 0.7rem 0;
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    color: var(--sand);
+    border-bottom: 1px solid color-mix(in srgb, var(--sand) 14%, transparent);
+  }
+  [lang='ar'] .drawer__link {
+    font-family: var(--font-arabic-display);
+    font-size: 1.5rem;
+  }
+  .drawer__num {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--brass-300);
+  }
+  .drawer__foot {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+  .drawer :global(.drawer__order) {
+    width: 100%;
+  }
+
+  /* --- Desktop --- */
+  @media (min-width: 900px) {
+    .nav__links {
+      display: block;
+    }
+    .nav__lang {
+      display: inline-flex;
+    }
+    .nav__order {
+      display: inline-flex;
+    }
+    .nav__toggle {
+      display: none;
+    }
+    .drawer {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .drawer__panel,
+    .drawer__backdrop {
+      transition-duration: 0.01ms;
+    }
+  }
+</style>

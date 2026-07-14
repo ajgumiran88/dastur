@@ -1,0 +1,259 @@
+---
+import Emblem from '@/components/ui/Emblem.astro';
+import Motif from '@/components/ui/Motif.astro';
+import { nav } from '@/config/nav';
+import { site } from '@/config/site';
+import { t, type Locale } from '@/lib/i18n';
+import { telLink, mailto, orderWaLink } from '@/lib/links';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const year = new Date().getFullYear();
+const platforms = site.deliveryPlatforms.filter((p) => p.enabled);
+const socials = site.socials.filter((s) => s.enabled);
+---
+
+<footer id="contact" class="footer section--indigo">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <Emblem variant="lockup" tone="sand" locale={locale} class="footer__logo" />
+      <p class="footer__statement measure--narrow">{t(locale, 'footer.statement')}</p>
+    </div>
+
+    <div class="footer__col">
+      <h2 class="footer__h caps">{t(locale, 'footer.contact')}</h2>
+      <ul role="list" class="footer__list">
+        <li>
+          <a href={orderWaLink(locale)} target="_blank" rel="noopener noreferrer">
+            WhatsApp
+          </a>
+        </li>
+        <li><a href={telLink(site.contact.phone)}>{site.contact.phone}</a></li>
+        <li><a href={mailto(site.contact.email)}>{site.contact.email}</a></li>
+      </ul>
+      <dl class="footer__meta">
+        <div>
+          <dt>{t(locale, 'delivery.fields.locations')}</dt>
+          <dd>{site.serviceAreas.join(' · ')}</dd>
+        </div>
+        <div>
+          <dt>{t(locale, 'delivery.fields.hours')}</dt>
+          <dd>{site.hours}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="footer__col">
+      <h2 class="footer__h caps">{t(locale, 'footer.explore')}</h2>
+      <ul role="list" class="footer__list">
+        {nav.map((item) => (
+          <li><a href={`#${item.id}`}>{t(locale, item.key)}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      {platforms.length > 0 && (
+        <>
+          <h2 class="footer__h caps">{t(locale, 'footer.order')}</h2>
+          <ul role="list" class="footer__list">
+            {platforms.map((p) => (
+              <li>
+                <a href={p.url} target="_blank" rel="noopener noreferrer" data-demo={p.demo ? '' : undefined}>
+                  {p.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {socials.length > 0 && (
+        <>
+          <h2 class="footer__h caps footer__h--follow">{t(locale, 'footer.follow')}</h2>
+          <ul role="list" class="footer__list footer__social">
+            {socials.map((s) => (
+              <li><a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></li>
+            ))}
+          </ul>
+        </>
+      )}
+    </div>
+  </div>
+
+  <div class="container">
+    <p class="footer__allergen">{t(locale, 'footer.allergenNote')}</p>
+  </div>
+
+  <div class="footer__tagline">
+    <span class="rule-diamond footer__rule">
+      <Motif name="diamond" />
+    </span>
+    <p class="footer__taglineText">{t(locale, 'footer.tagline')}</p>
+  </div>
+
+  <div class="container footer__bottom">
+    <p class="footer__copy">© {year} {site.brand.legalName}. {t(locale, 'footer.rights')}</p>
+    <ul role="list" class="footer__legal">
+      <li><a href={site.legal.privacy}>{t(locale, 'footer.legal.privacy')}</a></li>
+      <li><a href={site.legal.terms}>{t(locale, 'footer.legal.terms')}</a></li>
+      <li><a href={site.legal.allergen}>{t(locale, 'footer.legal.allergen')}</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: clamp(3.5rem, 6vw, 6rem) 2rem;
+    position: relative;
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem 2rem;
+  }
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+  }
+  .footer :global(.footer__logo) {
+    width: clamp(150px, 40vw, 190px);
+    align-items: flex-start;
+  }
+  [dir='rtl'] .footer :global(.footer__logo) {
+    align-items: flex-end;
+  }
+  .footer__statement {
+    color: var(--on-dark-muted);
+    font-size: var(--fs-small);
+    line-height: 1.7;
+  }
+  .footer__h {
+    color: var(--brass-300);
+    margin-bottom: 1rem;
+  }
+  .footer__h--follow {
+    margin-top: 1.8rem;
+  }
+  .footer__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--fs-small);
+  }
+  .footer__list a {
+    color: var(--sand);
+    opacity: 0.82;
+    transition: opacity var(--dur-1) var(--ease-out);
+  }
+  .footer__list a:hover {
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .footer__meta {
+    margin-top: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .footer__meta dt {
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--brass-300);
+    margin-bottom: 0.25rem;
+  }
+  [lang='ar'] .footer__meta dt {
+    letter-spacing: 0.02em;
+  }
+  .footer__meta dd {
+    margin: 0;
+    font-size: var(--fs-small);
+    color: var(--on-dark-muted);
+  }
+
+  .footer__allergen {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--sand) 14%, transparent);
+    font-size: 0.76rem;
+    color: var(--on-dark-muted);
+    max-width: 60ch;
+  }
+
+  .footer__tagline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-block: clamp(2.5rem, 5vw, 4rem);
+    text-align: center;
+    color: var(--brass-300);
+  }
+  .footer__rule {
+    width: min(320px, 70vw);
+    justify-content: center;
+  }
+  .footer__rule :global(.motif) {
+    color: var(--brass-300);
+    flex-shrink: 0;
+  }
+  .footer__taglineText {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 1rem + 1.6vw, 2rem);
+    letter-spacing: 0.02em;
+    color: var(--sand);
+  }
+  [lang='ar'] .footer__taglineText {
+    font-family: var(--font-arabic-display);
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--sand) 14%, transparent);
+  }
+  .footer__copy {
+    font-size: 0.76rem;
+    color: var(--on-dark-muted);
+  }
+  .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.76rem;
+  }
+  .footer__legal a {
+    color: var(--on-dark-muted);
+  }
+  .footer__legal a:hover {
+    color: var(--sand);
+  }
+
+  @media (min-width: 640px) {
+    .footer__grid {
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    }
+    .footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 960px) {
+    .footer__brand {
+      grid-column: auto;
+    }
+  }
+</style>

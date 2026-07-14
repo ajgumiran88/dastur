@@ -1,0 +1,42 @@
+---
+/**
+ * Semantic section wrapper with a color theme and consistent vertical rhythm.
+ */
+interface Props {
+  id: string;
+  theme?: 'light' | 'sand' | 'indigo' | 'oud' | 'palm';
+  labelledby?: string;
+  class?: string;
+  flush?: boolean; // remove default vertical padding (for full-bleed sections)
+}
+const {
+  id,
+  theme = 'light',
+  labelledby,
+  class: className = '',
+  flush = false,
+} = Astro.props;
+---
+
+<section
+  id={id}
+  class:list={[
+    'section',
+    `section--${theme}`,
+    !flush && 'section--pad',
+    className,
+  ]}
+  aria-labelledby={labelledby}
+>
+  <slot />
+</section>
+
+<style>
+  .section {
+    position: relative;
+    isolation: isolate;
+  }
+  .section--pad {
+    padding-block: var(--space-section);
+  }
+</style>

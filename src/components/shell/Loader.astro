@@ -1,0 +1,151 @@
+---
+import Emblem from '@/components/ui/Emblem.astro';
+import { type Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+---
+
+<div id="loader" class="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <Emblem variant="icon" tone="sand" animated locale={locale} class="loader__emblem" />
+    <span class="loader__word">
+      <Emblem variant="wordmark" tone="sand" locale={locale} />
+    </span>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var el = document.getElementById('loader');
+    if (!el) return;
+    var reduce =
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var seen = false;
+    try {
+      seen = sessionStorage.getItem('dastur.loaded') === '1';
+    } catch (e) {}
+
+    function finish() {
+      el.classList.add('is-done');
+      try {
+        sessionStorage.setItem('dastur.loaded', '1');
+      } catch (e) {}
+      window.setTimeout(function () {
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+      }, 900);
+    }
+
+    if (seen || reduce) {
+      // No animation: reveal content immediately.
+      el.classList.add('is-instant');
+      finish();
+      return;
+    }
+
+    document.documentElement.classList.add('is-loading');
+    el.classList.add('is-playing');
+    function done() {
+      document.documentElement.classList.remove('is-loading');
+      finish();
+    }
+    window.addEventListener('load', function () {
+      window.setTimeout(done, 700);
+    });
+    // Safety cap so the loader never blocks.
+    window.setTimeout(done, 2200);
+  })();
+</script>
+
+<style>
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-loader);
+    display: grid;
+    place-items: center;
+    background: var(--oud-800);
+    background-image: radial-gradient(
+      120% 90% at 50% 40%,
+      color-mix(in srgb, var(--oud) 88%, black) 0%,
+      var(--oud-900) 100%
+    );
+    color: var(--sand);
+    transition:
+      opacity 0.7s var(--ease-out),
+      visibility 0s linear 0.7s;
+  }
+  .loader__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
+  }
+  .loader :global(.loader__emblem) {
+    width: clamp(96px, 22vw, 150px);
+    height: auto;
+  }
+  .loader :global(.loader__emblem .emblem__icon) {
+    width: 100%;
+    height: auto;
+  }
+  .loader__word {
+    max-width: clamp(180px, 40vw, 260px);
+    opacity: 0;
+  }
+
+  /* Line-draw prep on the emblem strokes. */
+  .loader :global(.emblem .ln) {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .loader.is-playing :global(.emblem .ln) {
+      animation: emblem-draw 1.15s var(--ease-out) forwards;
+    }
+    .loader.is-playing .loader__word {
+      animation: word-fade 0.7s var(--ease-out) 0.85s forwards;
+    }
+  }
+
+  /* When we skip animation, everything is simply visible. */
+  .loader.is-instant :global(.emblem .ln) {
+    stroke-dashoffset: 0;
+  }
+  .loader.is-instant .loader__word {
+    opacity: 1;
+  }
+
+  .loader.is-done {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  @keyframes emblem-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes word-fade {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader {
+      transition: opacity 0.3s;
+    }
+    .loader :global(.emblem .ln) {
+      stroke-dashoffset: 0;
+    }
+    .loader__word {
+      opacity: 1;
+    }
+  }
+</style>

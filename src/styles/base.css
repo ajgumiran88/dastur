@@ -57,9 +57,8 @@ canvas {
   height: auto;
 }
 
-svg {
-  fill: currentColor;
-}
+/* Do NOT globally force svg fill — it would override per-svg `fill="none"`
+   on stroke-based line art (emblem, motifs). Each svg sets its own fill. */
 
 input,
 button,
@@ -232,17 +231,22 @@ p {
   outline-offset: -2px;
 }
 
-/* --- Scroll-reveal: visible by default; JS opts into animation via hooks --- */
+/* --- Scroll-reveal --- Content is ALWAYS visible by default. Only when the
+   animation module has armed (`html.animate-ready`, set pre-paint and revoked
+   by a failsafe if the module never initializes) do elements start hidden. */
 [data-animate] {
   opacity: 1;
 }
 @media (prefers-reduced-motion: no-preference) {
-  html.js [data-animate] {
+  html.animate-ready [data-animate] {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translateY(24px);
     will-change: opacity, transform;
+    transition:
+      opacity 0.7s var(--ease-out),
+      transform 0.7s var(--ease-out);
   }
-  html.js [data-animate].is-inview {
+  html.animate-ready [data-animate].is-inview {
     opacity: 1;
     transform: none;
   }

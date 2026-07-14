@@ -1,0 +1,44 @@
+---
+/**
+ * The full one-page composition. Both routes (/ and /ar/) render this with a
+ * locale, so markup stays DRY and RTL is handled by the layout direction.
+ */
+import Layout from '@/layouts/Layout.astro';
+import Loader from '@/components/shell/Loader.astro';
+import Nav from '@/components/shell/Nav.astro';
+import Footer from '@/components/shell/Footer.astro';
+
+import Hero from '@/components/sections/Hero.astro';
+import Story from '@/components/sections/Story.astro';
+import Menu from '@/components/sections/Menu.astro';
+import Experience from '@/components/sections/Experience.astro';
+import Packaging from '@/components/sections/Packaging.astro';
+import WhyDastur from '@/components/sections/WhyDastur.astro';
+import Delivery from '@/components/sections/Delivery.astro';
+import Testimonials from '@/components/sections/Testimonials.astro';
+import Gallery from '@/components/sections/Gallery.astro';
+
+import type { Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+---
+
+<Layout locale={locale}>
+  <Loader slot="loader" locale={locale} />
+  <Nav slot="nav" locale={locale} />
+
+  <Hero locale={locale} />
+  <Story locale={locale} />
+  <Menu locale={locale} />
+  <Experience locale={locale} />
+  <Packaging locale={locale} />
+  <WhyDastur locale={locale} />
+  <Delivery locale={locale} />
+  <Testimonials locale={locale} />
+  <Gallery locale={locale} />
+
+  <Footer slot="footer" locale={locale} />
+</Layout>

@@ -1,0 +1,70 @@
+---
+/**
+ * Small heritage line-motifs used decoratively across sections.
+ * Always aria-hidden; stroke uses currentColor.
+ */
+interface Props {
+  name: 'arch' | 'diamond' | 'dhow' | 'palm' | 'windtower' | 'wave';
+  class?: string;
+}
+const { name, class: className = '' } = Astro.props;
+---
+
+<svg
+  class:list={['motif', `motif--${name}`, className]}
+  viewBox="0 0 48 48"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {name === 'arch' && (
+    <path d="M12 42 V20 C12 12 17 7 24 7 C31 7 36 12 36 20 V42" />
+    <path d="M17 42 V21 C17 15 20 12 24 12 C28 12 31 15 31 21 V42" opacity="0.5" />
+  )}
+  {name === 'diamond' && (
+    <>
+      <path d="M24 8 L32 24 L24 40 L16 24 Z" />
+      <path d="M24 15 L28 24 L24 33 L20 24 Z" opacity="0.5" />
+    </>
+  )}
+  {name === 'dhow' && (
+    <>
+      <path d="M8 30 C15 37 33 37 40 30 C33 34 15 34 8 30 Z" />
+      <path d="M24 30 L24 9 L12 28 Z" />
+      <path d="M24 13 L34 28" />
+    </>
+  )}
+  {name === 'palm' && (
+    <>
+      <path d="M23 42 C23 32 23 26 24 20" />
+      <path d="M24 20 C16 15 10 14 5 16" />
+      <path d="M24 20 C32 15 38 14 43 16" />
+      <path d="M24 20 C18 13 14 9 13 4" />
+      <path d="M24 20 C30 13 34 9 35 4" />
+      <path d="M24 20 C24 13 24 9 24 5" />
+    </>
+  )}
+  {name === 'windtower' && (
+    <>
+      <path d="M16 42 V14 H32 V42" />
+      <path d="M13 14 H35 L31 7 H17 Z" />
+      <path d="M20 14 V34 M24 14 V34 M28 14 V34" opacity="0.7" />
+      <path d="M16 22 H32 M16 30 H32" opacity="0.5" />
+    </>
+  )}
+  {name === 'wave' && (
+    <path d="M4 24 q5 -5 10 0 q5 5 10 0 q5 -5 10 0 q5 5 10 0" />
+  )}
+</svg>
+
+<style>
+  .motif {
+    width: 1.5em;
+    height: 1.5em;
+    display: inline-block;
+  }
+</style>

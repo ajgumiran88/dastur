@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# PLACEHOLDER — replace with your live domain before launch.
+Sitemap: https://dastur.example/sitemap-index.xml
