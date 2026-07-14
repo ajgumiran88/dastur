@@ -1,0 +1,105 @@
+---
+import Section from '@/components/ui/Section.astro';
+import Motif from '@/components/ui/Motif.astro';
+import { t, tList, type Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const items = tList<{ title: string; desc: string }>(locale, 'why.items');
+---
+
+<Section id="why" theme="light" labelledby="why-title">
+  <div class="container why">
+    <div class="why__head" data-animate>
+      <p class="eyebrow"><Motif name="diamond" />{t(locale, 'why.eyebrow')}</p>
+      <h2 id="why-title" class="why__title">{t(locale, 'why.title')}</h2>
+      <p class="lead why__intro">{t(locale, 'why.intro')}</p>
+    </div>
+
+    <div class="why__list" data-animate data-animate-delay="100">
+      <ul role="list">
+        {
+          items.map((item, i) => (
+            <li class="why__item">
+              <span class="why__index caps">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3 class="why__itemTitle">{item.title}</h3>
+                <p class="why__itemDesc">{item.desc}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .why {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .why__head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  .why__title {
+    font-size: var(--fs-h2);
+    max-width: 12ch;
+  }
+  .why__intro {
+    color: var(--text-muted);
+    max-width: 30ch;
+  }
+
+  .why__list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .why__item {
+    display: flex;
+    gap: 1.25rem;
+    align-items: baseline;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .why__item:last-child {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .why__index {
+    color: var(--brass-600);
+    font-size: 0.72rem;
+    flex-shrink: 0;
+    min-width: 2ch;
+  }
+  .why__itemTitle {
+    font-size: var(--fs-h4);
+    margin-bottom: 0.25rem;
+  }
+  .why__itemDesc {
+    color: var(--text-muted);
+    font-size: var(--fs-small);
+    line-height: 1.6;
+  }
+
+  @media (min-width: 860px) {
+    .why {
+      grid-template-columns: 0.8fr 1.2fr;
+    }
+    .why__list ul {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 3rem;
+    }
+    /* keep top borders tidy across two columns */
+    .why__item:nth-child(2) {
+      border-top: 1px solid var(--hairline);
+    }
+  }
+</style>

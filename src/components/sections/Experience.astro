@@ -1,0 +1,114 @@
+---
+import Section from '@/components/ui/Section.astro';
+import Motif from '@/components/ui/Motif.astro';
+import { t, tList, type Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+
+const steps = tList<{ title: string; desc: string }>(locale, 'experience.steps');
+const motifs = ['diamond', 'windtower', 'arch', 'dhow'] as const;
+---
+
+<Section id="experience" theme="oud" labelledby="exp-title">
+  <div class="container">
+    <div class="exp__head" data-animate>
+      <p class="eyebrow"><Motif name="diamond" />{t(locale, 'experience.eyebrow')}</p>
+      <h2 id="exp-title" class="exp__title">{t(locale, 'experience.title')}</h2>
+      <p class="lead exp__intro measure">{t(locale, 'experience.intro')}</p>
+    </div>
+
+    <ol class="exp__steps" role="list">
+      {
+        steps.map((step, i) => (
+          <li class="exp__step" data-animate data-animate-delay={i * 90}>
+            <span class="exp__num caps">{String(i + 1).padStart(2, '0')}</span>
+            <span class="exp__ico"><Motif name={motifs[i] ?? 'diamond'} /></span>
+            <h3 class="exp__stepTitle">{step.title}</h3>
+            <p class="exp__stepDesc">{step.desc}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Section>
+
+<style>
+  .exp__head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    max-width: 42ch;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+  .exp__title {
+    font-size: var(--fs-h2);
+    color: var(--sand);
+  }
+  .exp__intro {
+    color: var(--on-dark-muted);
+  }
+
+  .exp__steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: step;
+  }
+  .exp__step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--sand) 20%, transparent);
+  }
+  .exp__num {
+    position: absolute;
+    inset-block-start: -0.15rem;
+    inset-inline-start: 0;
+    color: var(--brass-300);
+    font-size: 0.72rem;
+  }
+  .exp__ico {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 1px solid color-mix(in srgb, var(--sand) 28%, transparent);
+    border-radius: var(--r-sm);
+    color: var(--brass-300);
+    margin-bottom: 0.4rem;
+  }
+  .exp__ico :global(.motif) {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+  .exp__stepTitle {
+    font-size: var(--fs-h4);
+    color: var(--sand);
+  }
+  .exp__stepDesc {
+    color: var(--on-dark-muted);
+    font-size: var(--fs-small);
+    line-height: 1.6;
+  }
+
+  @media (min-width: 720px) {
+    .exp__steps {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem 3.5rem;
+    }
+  }
+  @media (min-width: 1040px) {
+    .exp__steps {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+  }
+</style>

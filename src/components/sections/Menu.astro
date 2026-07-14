@@ -1,0 +1,429 @@
+---
+import Section from '@/components/ui/Section.astro';
+import Motif from '@/components/ui/Motif.astro';
+import DishCard from '@/components/ui/DishCard.astro';
+import { menuCategories } from '@/config/menu';
+import { t, type Locale } from '@/lib/i18n';
+import { orderWaLink } from '@/lib/links';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+
+// Serialized dish detail for the modal (localized at build).
+const dishData = menuCategories.flatMap((c) =>
+  c.dishes.map((dish) => ({
+    id: dish.id,
+    name: dish.name[locale],
+    nameAlt: locale === 'en' ? dish.name.ar : dish.name.en,
+    desc: dish.desc[locale],
+    price: dish.price,
+    currency: t(locale, 'menu.currency'),
+    priceFrom: t(locale, 'menu.priceFrom'),
+    tags: dish.tags.map((tag) => t(locale, `menu.tags.${tag}`)),
+    order: orderWaLink(locale, dish.name.en),
+    orderLabel: t(locale, 'menu.addToOrder'),
+  })),
+);
+---
+
+<Section id="menu" theme="sand" labelledby="menu-title">
+  <div class="container">
+    <div class="menu__head" data-animate>
+      <p class="eyebrow"><Motif name="diamond" />{t(locale, 'menu.eyebrow')}</p>
+      <h2 id="menu-title" class="menu__title">{t(locale, 'menu.title')}</h2>
+      <p class="lead menu__intro measure">{t(locale, 'menu.intro')}</p>
+    </div>
+
+    <p class="menu__demo" role="note">
+      <Motif name="diamond" />{t(locale, 'menu.demoNote')}
+    </p>
+
+    <div class="menu__tabs" role="tablist" aria-label={t(locale, 'menu.title')}>
+      {
+        menuCategories.map((cat, i) => (
+          <button
+            class="menu__tab"
+            role="tab"
+            id={`tab-${cat.id}`}
+            aria-controls={`panel-${cat.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? '0' : '-1'}
+            data-tab={cat.id}
+          >
+            {t(locale, cat.key)}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="menu__panels">
+      {
+        menuCategories.map((cat, i) => (
+          <div
+            class="menu__panel"
+            role="tabpanel"
+            id={`panel-${cat.id}`}
+            aria-labelledby={`tab-${cat.id}`}
+            data-panel={cat.id}
+            hidden={i !== 0}
+          >
+            <h3 class="menu__panelTitle">{t(locale, cat.key)}</h3>
+            <div class="menu__grid">
+              {cat.dishes.map((dish) => (
+                <DishCard dish={dish} locale={locale} accent={cat.accent} motif={cat.motif} />
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <script type="application/json" id="menu-data" set:html={JSON.stringify(dishData)} is:inline />
+
+  <dialog id="dish-modal" class="dmodal" aria-labelledby="dmodal-name">
+    <div class="dmodal__inner">
+      <button class="dmodal__close" type="button" data-modal-close aria-label={t(locale, 'menu.close')}>
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+      <div class="dmodal__art" aria-hidden="true"><Motif name="arch" /></div>
+      <div class="dmodal__body">
+        <div class="dmodal__head">
+          <h3 id="dmodal-name" class="dmodal__name"></h3>
+          <p class="dmodal__alt"></p>
+        </div>
+        <p class="dmodal__desc"></p>
+        <ul class="dmodal__tags" role="list"></ul>
+        <div class="dmodal__foot">
+          <p class="dmodal__price tnum"></p>
+          <a class="dmodal__order" href="#" target="_blank" rel="noopener noreferrer"></a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</Section>
+
+<script>
+  // --- Tabs (progressive enhancement; without JS all panels show) ---
+  const tablist = document.querySelector<HTMLElement>('#menu [role="tablist"]');
+  if (tablist) {
+    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const panels = Array.from(
+      document.querySelectorAll<HTMLElement>('#menu [role="tabpanel"]'),
+    );
+    const select = (tab: HTMLButtonElement, focus = true) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+      });
+      panels.forEach((p) => {
+        p.hidden = p.dataset.panel !== tab.dataset.tab;
+      });
+      if (focus) tab.focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab, false));
+      tab.addEventListener('keydown', (e) => {
+        let next = -1;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (i + 1) % tabs.length;
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (i - 1 + tabs.length) % tabs.length;
+        if (e.key === 'Home') next = 0;
+        if (e.key === 'End') next = tabs.length - 1;
+        if (next >= 0) {
+          e.preventDefault();
+          select(tabs[next]);
+        }
+      });
+    });
+  }
+
+  // --- Dish details modal ---
+  const modal = document.getElementById('dish-modal') as HTMLDialogElement | null;
+  const dataEl = document.getElementById('menu-data');
+  if (modal && dataEl && typeof modal.showModal === 'function') {
+    type Dish = {
+      id: string; name: string; nameAlt: string; desc: string;
+      price: number; currency: string; priceFrom: string;
+      tags: string[]; order: string; orderLabel: string;
+    };
+    let dishes: Dish[] = [];
+    try {
+      dishes = JSON.parse(dataEl.textContent || '[]');
+    } catch (e) {}
+    const map = new Map(dishes.map((d) => [d.id, d]));
+    const q = (s: string) => modal.querySelector(s) as HTMLElement;
+
+    document.querySelectorAll<HTMLButtonElement>('[data-dish]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const d = map.get(btn.dataset.dish!);
+        if (!d) return;
+        q('.dmodal__name').textContent = d.name;
+        q('.dmodal__alt').textContent = d.nameAlt;
+        q('.dmodal__desc').textContent = d.desc;
+        q('.dmodal__price').innerHTML =
+          `<span class="dmodal__from">${d.priceFrom}</span> <span class="dmodal__amt">${d.price}</span> <span class="dmodal__cur">${d.currency}</span>`;
+        const tags = q('.dmodal__tags');
+        tags.innerHTML = '';
+        d.tags.forEach((tg) => {
+          const li = document.createElement('li');
+          li.className = 'dmodal__tag';
+          li.textContent = tg;
+          tags.appendChild(li);
+        });
+        const order = q('.dmodal__order') as HTMLAnchorElement;
+        order.href = d.order;
+        order.textContent = d.orderLabel;
+        modal.showModal();
+      });
+    });
+
+    modal.querySelectorAll('[data-modal-close]').forEach((c) =>
+      c.addEventListener('click', () => modal.close()),
+    );
+    // Backdrop click closes.
+    modal.addEventListener('click', (e) => {
+      const r = modal.getBoundingClientRect();
+      if (
+        e.clientX < r.left || e.clientX > r.right ||
+        e.clientY < r.top || e.clientY > r.bottom
+      ) {
+        modal.close();
+      }
+    });
+  }
+</script>
+
+<style>
+  .menu__head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    max-width: 40ch;
+  }
+  .menu__title {
+    font-size: var(--fs-h2);
+  }
+  .menu__intro {
+    color: var(--text-muted);
+  }
+
+  .menu__demo {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-top: 1.6rem;
+    padding: 0.8rem 1.1rem;
+    background: color-mix(in srgb, var(--brass) 12%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--brass) 30%, transparent);
+    border-radius: var(--r-sm);
+    font-size: 0.78rem;
+    color: var(--oud-muted);
+    max-width: 70ch;
+  }
+  .menu__demo :global(.motif) {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    color: var(--brass-600);
+    margin-top: 0.15rem;
+  }
+
+  .menu__tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+    margin-top: 2.2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .menu__tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .menu__tab {
+    flex-shrink: 0;
+    padding: 0.6em 1.15em;
+    min-height: 44px;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--hairline);
+    font-size: var(--fs-small);
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition:
+      background-color var(--dur-2) var(--ease-out),
+      color var(--dur-2) var(--ease-out),
+      border-color var(--dur-2) var(--ease-out);
+  }
+  .menu__tab:hover {
+    color: var(--text);
+    border-color: var(--brass);
+  }
+  .menu__tab[aria-selected='true'] {
+    background: var(--oud);
+    color: var(--sand);
+    border-color: var(--oud);
+  }
+
+  .menu__panels {
+    margin-top: 2.2rem;
+  }
+  .menu__panelTitle {
+    font-size: var(--fs-h3);
+    margin-bottom: 1.5rem;
+  }
+  html:not(.js) .menu__panelTitle {
+    margin-top: 2.5rem;
+  }
+  /* Without JS, show every panel (tabs are non-functional but harmless). */
+  html:not(.js) .menu__panel[hidden] {
+    display: block;
+  }
+  .menu__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* --- Modal --- */
+  .dmodal {
+    margin: auto; /* restore native dialog centering (global reset zeroes it) */
+    width: min(560px, 92vw);
+    max-height: 88vh;
+    padding: 0;
+    border: none;
+    border-radius: var(--r-lg);
+    background: var(--surface-raised);
+    color: var(--text);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .dmodal::backdrop {
+    background: color-mix(in srgb, var(--oud-900) 55%, transparent);
+    backdrop-filter: blur(3px);
+  }
+  .dmodal__inner {
+    position: relative;
+  }
+  .dmodal__close {
+    position: absolute;
+    inset-block-start: 0.9rem;
+    inset-inline-end: 0.9rem;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    z-index: 1;
+  }
+  .dmodal__art {
+    display: grid;
+    place-items: center;
+    padding: 2.2rem 0 1rem;
+    background: radial-gradient(
+      100% 100% at 50% 0%,
+      color-mix(in srgb, var(--palm) 16%, var(--surface)) 0%,
+      var(--surface-raised) 70%
+    );
+    color: var(--palm);
+  }
+  .dmodal__art :global(.motif) {
+    width: 3rem;
+    height: 3rem;
+  }
+  .dmodal__body {
+    padding: 1.5rem clamp(1.4rem, 4vw, 2.2rem) 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .dmodal__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .dmodal__name {
+    font-size: var(--fs-h3);
+  }
+  .dmodal__alt {
+    font-family: var(--font-arabic-display);
+    color: var(--text-muted);
+  }
+  .dmodal__desc {
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .dmodal__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .dmodal__tag {
+    font-size: 0.72rem;
+    padding: 0.3em 0.7em;
+    border-radius: var(--r-pill);
+    background: var(--sand-50);
+    border: 1px solid var(--hairline);
+    color: var(--oud-muted);
+  }
+  .dmodal__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .dmodal__from {
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+  }
+  .dmodal__amt {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 600;
+  }
+  .dmodal__cur {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .dmodal__order {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 1.4rem;
+    border-radius: var(--r-pill);
+    background: var(--palm);
+    color: #fff;
+    font-size: var(--fs-small);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  [lang='ar'] .dmodal__order {
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  @media (min-width: 560px) {
+    .menu__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1000px) {
+    .menu__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

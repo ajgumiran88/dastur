@@ -1,0 +1,104 @@
+---
+// Self-hosted brand fonts (side-effect imports)
+import '@fontsource-variable/cormorant-garamond';
+import '@fontsource/alexandria/300.css';
+import '@fontsource/alexandria/400.css';
+import '@fontsource/alexandria/500.css';
+import '@fontsource/alexandria/arabic-400.css';
+import '@fontsource/alexandria/arabic-500.css';
+import '@fontsource/tajawal/500.css';
+import '@fontsource/tajawal/700.css';
+
+import '@/styles/tokens.css';
+import '@/styles/base.css';
+
+import { dir, t, type Locale } from '@/lib/i18n';
+import { pageMeta, foodEstablishmentJsonLd } from '@/lib/seo';
+import { site } from '@/config/site';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const meta = pageMeta(locale);
+const jsonLd = JSON.stringify(foodEstablishmentJsonLd(locale));
+const direction = dir(locale);
+---
+
+<!doctype html>
+<html lang={locale} dir={direction}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <link rel="canonical" href={meta.canonical} />
+    <meta name="theme-color" content={site.seo.themeColor} />
+
+    {/* Hreflang alternates */}
+    {
+      meta.hreflang.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))
+    }
+
+    {/* Open Graph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DASTUR" />
+    <meta property="og:title" content={meta.title} />
+    <meta property="og:description" content={meta.description} />
+    <meta property="og:image" content={meta.ogImage} />
+    <meta property="og:url" content={meta.canonical} />
+    <meta property="og:locale" content={locale === 'ar' ? 'ar_AE' : 'en_US'} />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={meta.title} />
+    <meta name="twitter:description" content={meta.description} />
+    <meta name="twitter:image" content={meta.ogImage} />
+
+    {/* Favicons */}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {/* Enable JS-gated enhancements before first paint (avoids reveal flash).
+        Arm scroll-reveal only if motion is allowed AND IntersectionObserver is
+        supported. A failsafe un-arms it if the animation module never boots, so
+        content can never stay stuck hidden. */}
+    <script is:inline>
+      (function () {
+        var h = document.documentElement;
+        h.classList.add('js');
+        try {
+          var motionOK = matchMedia('(prefers-reduced-motion: no-preference)').matches;
+          if (motionOK && 'IntersectionObserver' in window) {
+            h.classList.add('animate-ready');
+            setTimeout(function () {
+              if (!h.classList.contains('animate-live')) {
+                h.classList.remove('animate-ready');
+              }
+            }, 2500);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <script type="application/ld+json" is:inline set:html={jsonLd} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t(locale, 'a11y.skipLink')}</a>
+    <slot name="loader" />
+    <slot name="nav" />
+    <main id="main">
+      <slot />
+    </main>
+    <slot name="footer" />
+
+    {/* Deferred, progressive-enhancement animation module */}
+    <script>
+      import '@/scripts/animations.ts';
+    </script>
+  </body>
+</html>

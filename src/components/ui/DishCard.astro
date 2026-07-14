@@ -1,0 +1,401 @@
+---
+import { Image } from 'astro:assets';
+import { t, type Locale } from '@/lib/i18n';
+import { orderWaLink } from '@/lib/links';
+import type { Dish, DishTag } from '@/config/menu';
+import Motif from './Motif.astro';
+
+interface Props {
+  dish: Dish;
+  locale: Locale;
+  accent: 'palm' | 'oud' | 'indigo' | 'sand';
+  motif: 'palm' | 'dhow' | 'windtower' | 'arch' | 'diamond';
+}
+const { dish, locale, accent, motif } = Astro.props;
+
+const accentVar: Record<string, string> = {
+  palm: 'var(--palm)',
+  oud: 'var(--oud)',
+  indigo: 'var(--indigo)',
+  sand: 'var(--sand-300)',
+};
+
+const tagGlyph: Record<DishTag, string> = {
+  vegetarian: 'leaf',
+  vegan: 'leaf',
+  spicy: 'flame',
+  'contains-nuts': 'nut',
+  dairy: 'drop',
+  'gluten-free': 'wheat',
+  'chef-signature': 'star',
+};
+
+const name = dish.name[locale];
+const nameAlt = locale === 'en' ? dish.name.ar : dish.name.en;
+const waHref = orderWaLink(locale, dish.name.en);
+const monogram = dish.name.en.charAt(0);
+---
+
+<article class="dish" style={`--card-accent:${accentVar[accent]}`}>
+  <figure class="dish__media">
+    {
+      dish.image ? (
+        <Image
+          src={dish.image}
+          alt={name}
+          width={640}
+          height={480}
+          widths={[320, 480, 640]}
+          sizes="(max-width: 640px) 90vw, 380px"
+          loading="lazy"
+          class="dish__img"
+        />
+      ) : (
+        <div class="dish__placeholder" data-demo aria-hidden="true">
+          <span class="dish__monogram">{monogram}</span>
+          <Motif name={motif} class="dish__motif" />
+          <span class="dish__demoTag">{t(locale, 'gallery.demoImage')}</span>
+        </div>
+      )
+    }
+    {
+      dish.tags.includes('chef-signature') && (
+        <span class="dish__flag">
+          <Motif name="diamond" />
+          {t(locale, 'menu.tags.chef-signature')}
+        </span>
+      )
+    }
+  </figure>
+
+  <div class="dish__body">
+    <div class="dish__head">
+      <h3 class="dish__name">{name}</h3>
+      <p class="dish__alt" lang={locale === 'en' ? 'ar' : 'en'} dir={locale === 'en' ? 'rtl' : 'ltr'}>
+        {nameAlt}
+      </p>
+    </div>
+    <p class="dish__desc">{dish.desc[locale]}</p>
+
+    {
+      dish.tags.length > 0 && (
+        <ul class="dish__tags" role="list">
+          {dish.tags.map((tag) => (
+            <li class="chip" data-glyph={tagGlyph[tag]}>
+              <span class="chip__ico" aria-hidden="true" />
+              {t(locale, `menu.tags.${tag}`)}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <div class="dish__foot">
+      <p class="dish__price tnum">
+        <span class="dish__from">{t(locale, 'menu.priceFrom')}</span>
+        <span class="dish__amount">{dish.price}</span>
+        <span class="dish__cur">{t(locale, 'menu.currency')}</span>
+      </p>
+      <div class="dish__actions">
+        <button
+          class="dish__details"
+          type="button"
+          data-dish={dish.id}
+          aria-haspopup="dialog"
+        >
+          {t(locale, 'menu.viewDetails')}
+        </button>
+        <a
+          class="dish__order"
+          href={waHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${t(locale, 'menu.addToOrder')} — ${name}`}
+        >
+          {t(locale, 'menu.addToOrder')}
+          <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 10h10M11 6l4 4-4 4" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  .dish {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface-raised);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    transition:
+      transform var(--dur-2) var(--ease-out),
+      box-shadow var(--dur-2) var(--ease-out),
+      border-color var(--dur-2) var(--ease-out);
+  }
+  .dish:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: color-mix(in srgb, var(--brass) 45%, transparent);
+  }
+
+  .dish__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--sand-100);
+  }
+  .dish__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur-4) var(--ease-out);
+  }
+  .dish:hover .dish__img {
+    transform: scale(1.05);
+  }
+
+  .dish__placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(120% 100% at 50% 0%, color-mix(in srgb, var(--card-accent) 22%, var(--sand-100)) 0%, var(--sand-100) 70%);
+    color: var(--card-accent);
+    overflow: hidden;
+  }
+  .dish__monogram {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 9rem;
+    font-weight: 500;
+    opacity: 0.14;
+    line-height: 1;
+    color: var(--oud);
+  }
+  .dish__motif {
+    width: 2.6rem;
+    height: 2.6rem;
+    opacity: 0.85;
+    color: var(--card-accent);
+  }
+  .dish__demoTag {
+    position: absolute;
+    bottom: 0.7rem;
+    inset-inline: 0;
+    text-align: center;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oud-muted);
+    opacity: 0.75;
+    padding-inline: 1rem;
+  }
+
+  .dish__flag {
+    position: absolute;
+    top: 0.7rem;
+    inset-inline-start: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding: 0.3em 0.7em;
+    background: color-mix(in srgb, var(--oud) 82%, transparent);
+    color: var(--sand);
+    border-radius: var(--r-pill);
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .dish__flag :global(.motif) {
+    width: 0.9em;
+    height: 0.9em;
+    color: var(--brass-300);
+  }
+  [lang='ar'] .dish__flag {
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .dish__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1.25rem 1.35rem 1.4rem;
+    flex: 1;
+  }
+  .dish__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .dish__name {
+    font-size: var(--fs-h4);
+    line-height: 1.1;
+  }
+  .dish__alt {
+    font-family: var(--font-arabic-display);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  [lang='ar'] .dish__alt {
+    font-family: var(--font-display);
+  }
+  .dish__desc {
+    color: var(--text-muted);
+    font-size: var(--fs-small);
+    line-height: 1.6;
+  }
+
+  .dish__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    list-style: none;
+    padding: 0;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding: 0.28em 0.65em;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    color: var(--oud-muted);
+    background: var(--sand-50);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-pill);
+  }
+  .chip__ico {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    background: currentColor;
+    color: var(--brass-600);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+  .chip[data-glyph='leaf'] .chip__ico {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 4 13C4 6 12 3 20 4c1 8-2 16-9 16Z'/%3E%3Cpath d='M8 17c2-4 5-7 9-9'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 4 13C4 6 12 3 20 4c1 8-2 16-9 16Z'/%3E%3Cpath d='M8 17c2-4 5-7 9-9'/%3E%3C/svg%3E");
+    color: var(--palm);
+  }
+  .chip[data-glyph='flame'] .chip__ico {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2C9 6 6 8 6 13a6 6 0 0 0 12 0c0-3-2-5-3-7-1 2-2 3-3 3 0-3 0-5 0-7Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2C9 6 6 8 6 13a6 6 0 0 0 12 0c0-3-2-5-3-7-1 2-2 3-3 3 0-3 0-5 0-7Z'/%3E%3C/svg%3E");
+    color: #a4472b;
+  }
+  .chip[data-glyph='nut'] .chip__ico {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3c4 0 7 4 7 9s-3 9-7 9-7-4-7-9 3-9 7-9Z'/%3E%3Cpath d='M9 9c2 2 4 2 6 0'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3c4 0 7 4 7 9s-3 9-7 9-7-4-7-9 3-9 7-9Z'/%3E%3Cpath d='M9 9c2 2 4 2 6 0'/%3E%3C/svg%3E");
+  }
+  .chip[data-glyph='drop'] .chip__ico {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3c3 4 6 7 6 11a6 6 0 0 1-12 0c0-4 3-7 6-11Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3c3 4 6 7 6 11a6 6 0 0 1-12 0c0-4 3-7 6-11Z'/%3E%3C/svg%3E");
+  }
+  .chip[data-glyph='wheat'] .chip__ico {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22V8'/%3E%3Cpath d='M12 8c-2-2-2-4-2-6 2 0 4 0 4 2M12 8c2-2 2-4 2-6-2 0-4 0-4 2'/%3E%3Cpath d='M4 20 20 4'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22V8'/%3E%3Cpath d='M12 8c-2-2-2-4-2-6 2 0 4 0 4 2M12 8c2-2 2-4 2-6-2 0-4 0-4 2'/%3E%3Cpath d='M4 20 20 4'/%3E%3C/svg%3E");
+  }
+  .chip[data-glyph='star'] .chip__ico {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M12 3 14 10 21 12 14 14 12 21 10 14 3 12 10 10Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M12 3 14 10 21 12 14 14 12 21 10 14 3 12 10 10Z'/%3E%3C/svg%3E");
+    color: var(--brass-600);
+  }
+
+  .dish__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+  .dish__price {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3em;
+    color: var(--text);
+  }
+  .dish__from {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+  }
+  .dish__amount {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  .dish__cur {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .dish__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .dish__details {
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--border);
+    padding: 0.4em 0;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .dish__details:hover {
+    color: var(--text);
+    text-decoration-color: var(--brass);
+  }
+  .dish__order {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    color: var(--palm);
+    font-weight: 500;
+    font-size: var(--fs-small);
+    min-height: 44px;
+  }
+  .dish__order svg {
+    transition: transform var(--dur-1) var(--ease-out);
+  }
+  .dish__order:hover svg {
+    transform: translateX(3px);
+  }
+  [dir='rtl'] .dish__order svg {
+    transform: scaleX(-1);
+  }
+  [dir='rtl'] .dish__order:hover svg {
+    transform: scaleX(-1) translateX(3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dish,
+    .dish__img,
+    .dish__order svg {
+      transition: none;
+    }
+    .dish:hover {
+      transform: none;
+    }
+    .dish:hover .dish__img {
+      transform: none;
+    }
+  }
+</style>

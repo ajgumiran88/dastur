@@ -1,0 +1,161 @@
+---
+import { Image } from 'astro:assets';
+import Section from '@/components/ui/Section.astro';
+import Motif from '@/components/ui/Motif.astro';
+import { t, tList, type Locale } from '@/lib/i18n';
+import ropeBoxes from '@/assets/packaging/rope-boxes.jpg';
+import greenBento from '@/assets/packaging/green-bento.jpg';
+import kraftBag from '@/assets/packaging/kraft-bag.jpg';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const points = tList<string>(locale, 'packaging.points');
+---
+
+<Section id="packaging" theme="oud" labelledby="pkg-title">
+  <div class="container pkg">
+    <div class="pkg__text" data-animate>
+      <p class="eyebrow"><Motif name="diamond" />{t(locale, 'packaging.eyebrow')}</p>
+      <h2 id="pkg-title" class="pkg__title">{t(locale, 'packaging.title')}</h2>
+      <p class="lead pkg__body measure">{t(locale, 'packaging.body')}</p>
+      <ul class="pkg__points" role="list">
+        {
+          points.map((p) => (
+            <li>
+              <Motif name="diamond" />
+              <span>{p}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="pkg__media" data-animate data-animate-delay="120">
+      <figure class="pkg__main" data-tilt>
+        <Image
+          src={ropeBoxes}
+          alt="Three cream DASTUR rope-handle boxes with green rims and the engraved heritage skyline."
+          widths={[520, 820, 1100]}
+          sizes="(max-width: 900px) 90vw, 520px"
+          loading="lazy"
+        />
+      </figure>
+      <figure class="pkg__accent pkg__accent--1">
+        <Image
+          src={greenBento}
+          alt="Palm-green DASTUR bento carry-box with dates, luqaimat and machboos."
+          widths={[280, 440]}
+          sizes="200px"
+          loading="lazy"
+        />
+      </figure>
+      <figure class="pkg__accent pkg__accent--2">
+        <Image
+          src={kraftBag}
+          alt="Kraft DASTUR delivery bag with a palm-green band and heritage skyline."
+          widths={[240, 380]}
+          sizes="170px"
+          loading="lazy"
+        />
+      </figure>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .pkg {
+    display: grid;
+    gap: clamp(3rem, 6vw, 5rem);
+    align-items: center;
+  }
+  .pkg__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+  }
+  .pkg__title {
+    font-size: var(--fs-h2);
+    color: var(--sand);
+    max-width: 14ch;
+  }
+  .pkg__body {
+    color: var(--on-dark-muted);
+  }
+  .pkg__points {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+  }
+  .pkg__points li {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--sand);
+    font-size: var(--fs-small);
+  }
+  .pkg__points :global(.motif) {
+    width: 1rem;
+    height: 1rem;
+    color: var(--brass-300);
+    flex-shrink: 0;
+  }
+
+  .pkg__media {
+    position: relative;
+    min-height: 340px;
+    perspective: 1200px;
+  }
+  .pkg__main {
+    margin: 0;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-dark);
+    transform-style: preserve-3d;
+    transition: transform var(--dur-3) var(--ease-out);
+    will-change: transform;
+  }
+  .pkg__main :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .pkg__accent {
+    position: absolute;
+    margin: 0;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-dark);
+    border: 3px solid var(--oud-800);
+  }
+  .pkg__accent :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .pkg__accent--1 {
+    width: clamp(120px, 22vw, 190px);
+    inset-block-end: -6%;
+    inset-inline-start: -6%;
+  }
+  .pkg__accent--2 {
+    width: clamp(100px, 18vw, 160px);
+    inset-block-start: -8%;
+    inset-inline-end: -4%;
+  }
+
+  @media (min-width: 900px) {
+    .pkg {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pkg__main {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,233 @@
+---
+import { Image } from 'astro:assets';
+import Button from '@/components/ui/Button.astro';
+import Motif from '@/components/ui/Motif.astro';
+import { t, type Locale } from '@/lib/i18n';
+import { orderWaLink } from '@/lib/links';
+import skyline from '@/assets/illustration/skyline.png';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+---
+
+<section id="home" class="hero section--oud" aria-labelledby="hero-title">
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__wash"></div>
+    <div class="hero__deco hero__deco--palm1"><Motif name="palm" /></div>
+    <div class="hero__deco hero__deco--palm2"><Motif name="palm" /></div>
+    <div class="hero__skyline" data-parallax data-parallax-speed="0.12">
+      <Image src={skyline} alt="" widths={[768, 1280, 1920]} sizes="100vw" loading="eager" />
+    </div>
+    <div class="hero__grain"></div>
+  </div>
+
+  <div class="container hero__inner">
+    <p class="eyebrow hero__eyebrow" data-animate data-animate-delay="0">
+      <Motif name="diamond" />{t(locale, 'hero.eyebrow')}
+    </p>
+    <h1 id="hero-title" class="hero__title" data-animate data-animate-delay="80">
+      {t(locale, 'hero.title')}
+    </h1>
+    <p class="lead hero__lead measure" data-animate data-animate-delay="160">
+      {t(locale, 'hero.body')}
+    </p>
+    <div class="hero__cta" data-animate data-animate-delay="240">
+      <Button href={orderWaLink(locale)} variant="primary" size="lg" magnetic external>
+        {t(locale, 'hero.ctaOrder')}
+      </Button>
+      <Button href="#menu" variant="ghost" size="lg">
+        {t(locale, 'hero.ctaMenu')}
+      </Button>
+    </div>
+  </div>
+
+  <a class="hero__scroll" href="#story" data-animate data-animate-delay="380" aria-label={t(locale, 'hero.scroll')}>
+    <span>{t(locale, 'hero.scroll')}</span>
+    <span class="hero__scroll-line" aria-hidden="true"></span>
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    overflow: clip;
+    padding-block: calc(var(--nav-h) + 3rem) 6rem;
+    background:
+      linear-gradient(155deg, var(--indigo) 0%, var(--oud-800) 62%, var(--oud) 100%);
+    color: var(--sand);
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: clip;
+  }
+  .hero__wash {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      90% 70% at 78% 12%,
+      color-mix(in srgb, var(--palm) 30%, transparent) 0%,
+      transparent 55%
+    );
+    opacity: 0.55;
+  }
+  .hero__skyline {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    height: min(46vh, 460px);
+    line-height: 0;
+    opacity: 0.12;
+    filter: brightness(0) invert(1) sepia(0.5) saturate(1.4) hue-rotate(345deg)
+      brightness(1.05);
+    -webkit-mask-image: linear-gradient(to top, black 40%, transparent 96%);
+    mask-image: linear-gradient(to top, black 40%, transparent 96%);
+  }
+  .hero__skyline :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+  .hero__deco {
+    position: absolute;
+    color: var(--palm-400);
+    line-height: 0;
+  }
+  .hero__deco :global(.motif) {
+    width: 100%;
+    height: auto;
+  }
+  .hero__deco--palm1 {
+    inset-block-start: -4%;
+    inset-inline-start: -3%;
+    width: min(32vw, 360px);
+    transform: rotate(14deg);
+    opacity: 0.12;
+  }
+  .hero__deco--palm2 {
+    inset-block-end: 12%;
+    inset-inline-end: 5%;
+    width: min(18vw, 200px);
+    transform: rotate(-8deg);
+    opacity: 0.09;
+  }
+  .hero__grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .hero__eyebrow {
+    color: var(--brass-300);
+  }
+  .hero__eyebrow :global(.motif) {
+    width: 1em;
+    height: 1em;
+    color: var(--brass-300);
+  }
+  .hero__title {
+    font-size: var(--fs-display);
+    line-height: 1.02;
+    max-width: 16ch;
+    color: var(--sand);
+    font-weight: 500;
+  }
+  .hero__lead {
+    color: var(--on-dark-muted);
+    max-width: 52ch;
+  }
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .hero__scroll {
+    position: absolute;
+    inset-block-end: 1.75rem;
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--on-dark-muted);
+  }
+  [lang='ar'] .hero__scroll {
+    letter-spacing: 0.06em;
+  }
+  [dir='rtl'] .hero__scroll {
+    transform: translateX(50%);
+  }
+  .hero__scroll-line {
+    width: 1px;
+    height: 44px;
+    background: linear-gradient(to bottom, var(--brass-300), transparent);
+    position: relative;
+    overflow: hidden;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__scroll-line::after {
+      content: '';
+      position: absolute;
+      inset-inline: 0;
+      top: -50%;
+      height: 50%;
+      background: var(--sand);
+      animation: scroll-drop 2s var(--ease-inout) infinite;
+    }
+    @keyframes scroll-drop {
+      0% {
+        transform: translateY(-100%);
+      }
+      60%,
+      100% {
+        transform: translateY(200%);
+      }
+    }
+    .hero__deco {
+      animation: sway 9s ease-in-out infinite alternate;
+      transform-origin: top center;
+    }
+    .hero__deco--palm2 {
+      animation-duration: 11s;
+    }
+    @keyframes sway {
+      from {
+        rotate: -2deg;
+      }
+      to {
+        rotate: 2deg;
+      }
+    }
+  }
+
+  @media (min-width: 700px) {
+    .hero__title {
+      max-width: 18ch;
+    }
+  }
+</style>

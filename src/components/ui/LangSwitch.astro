@@ -1,0 +1,60 @@
+---
+import { localizedPath, otherLocale, t, type Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+  class?: string;
+}
+const { locale, class: className = '' } = Astro.props;
+const other = otherLocale(locale);
+const label = t(locale, 'a11y.langSwitch');
+---
+
+<div class:list={['lang', className]} role="group" aria-label={label}>
+  <a
+    class="lang__opt"
+    href={localizedPath('en')}
+    hreflang="en"
+    lang="en"
+    aria-current={locale === 'en' ? 'true' : undefined}>EN</a
+  >
+  <span class="lang__sep" aria-hidden="true">/</span>
+  <a
+    class="lang__opt"
+    href={localizedPath('ar')}
+    hreflang="ar"
+    lang="ar"
+    aria-current={locale === 'ar' ? 'true' : undefined}>ع</a
+  >
+  <span class="sr-only">Current language: {locale === 'ar' ? 'Arabic' : 'English'}. Switch to {other === 'ar' ? 'Arabic' : 'English'}.</span>
+</div>
+
+<style>
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    letter-spacing: 0.08em;
+  }
+  .lang__opt {
+    padding: 0.25em 0.15em;
+    opacity: 0.6;
+    transition: opacity var(--dur-1) var(--ease-out);
+  }
+  .lang__opt:hover {
+    opacity: 1;
+  }
+  .lang__opt[aria-current='true'] {
+    opacity: 1;
+    font-weight: 600;
+  }
+  .lang__opt[lang='ar'] {
+    font-size: 1.15em;
+    line-height: 1;
+  }
+  .lang__sep {
+    opacity: 0.35;
+  }
+</style>

@@ -1,0 +1,181 @@
+---
+/**
+ * DASTUR emblem — an ogee arch framing a palm, dhow and wind tower, with the
+ * DASTUR wordmark and tagline. Single-color (uses currentColor) so it recolors
+ * cleanly and can be line-drawn for the loader.
+ *
+ * NOTE: This is a faithful web reconstruction of the brand emblem for
+ * scalability/animation. Replace with the official licensed logo files for
+ * pixel-perfect final production (see README).
+ */
+import { t, type Locale } from '@/lib/i18n';
+
+interface Props {
+  variant?: 'lockup' | 'wordmark' | 'icon';
+  tone?: 'ink' | 'sand' | 'palm' | 'brass' | 'current';
+  animated?: boolean;
+  locale?: Locale;
+  class?: string;
+}
+
+const {
+  variant = 'lockup',
+  tone = 'current',
+  animated = false,
+  locale = 'en',
+  class: className = '',
+} = Astro.props;
+
+const toneColor: Record<string, string> = {
+  ink: 'var(--oud)',
+  sand: 'var(--sand)',
+  palm: 'var(--palm)',
+  brass: 'var(--brass)',
+  current: 'currentColor',
+};
+const color = toneColor[tone];
+const showIcon = variant === 'lockup' || variant === 'icon';
+const showWord = variant === 'lockup' || variant === 'wordmark';
+const title = t(locale, 'a11y.emblem');
+---
+
+<span
+  class:list={['emblem', `emblem--${variant}`, animated && 'is-draw', className]}
+  style={`color:${color}`}
+  role="img"
+  aria-label={title}
+>
+  {
+    showIcon && (
+      <svg
+        class="emblem__icon"
+        viewBox="0 0 120 150"
+        fill="none"
+        aria-hidden="true"
+        stroke="currentColor"
+        stroke-width="2.1"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        {/* Ogee arch — outer */}
+        <path
+          class="ln"
+          pathLength="1"
+          d="M15 138 L15 60 C15 36 30 20 44 17 C53 15 56 12 60 5 C64 12 67 15 76 17 C90 20 105 36 105 60 L105 138"
+        />
+        {/* Ogee arch — inner */}
+        <path
+          class="ln"
+          pathLength="1"
+          d="M23 138 L23 62 C23 42 35 28 47 25 C54 23 57 20 60 14 C63 20 66 23 73 25 C85 28 97 42 97 62 L97 138"
+        />
+        {/* Base line under the arch */}
+        <path class="ln" pathLength="1" d="M15 138 H105" />
+
+        {/* Palm tree (left) — drooping fronds */}
+        <path class="ln" pathLength="1" d="M41 114 C41 102 41 92 42 82" />
+        <path class="ln" pathLength="1" d="M42 82 C34 83 27 86 21 92" />
+        <path class="ln" pathLength="1" d="M42 82 C50 83 57 86 63 92" />
+        <path class="ln" pathLength="1" d="M42 82 C34 78 28 76 22 75" />
+        <path class="ln" pathLength="1" d="M42 82 C50 78 56 76 62 75" />
+        <path class="ln" pathLength="1" d="M42 82 C38 74 35 69 33 63" />
+        <path class="ln" pathLength="1" d="M42 82 C46 74 49 69 51 63" />
+        <circle class="ln" pathLength="1" cx="42" cy="81" r="1.6" fill="currentColor" stroke="none" />
+
+        {/* Wind tower (right) */}
+        <path class="ln" pathLength="1" d="M70 112 L70 55 L86 55 L86 112" />
+        <path class="ln" pathLength="1" d="M68 55 L88 55 L84 48 L72 48 Z" />
+        <path class="ln" pathLength="1" d="M74 55 L74 92 M78 55 L78 92 M82 55 L82 92" />
+        <path class="ln" pathLength="1" d="M70 70 H86 M70 80 H86" />
+
+        {/* Dhow — hull + lateen sail (center) */}
+        <path class="ln" pathLength="1" d="M40 118 C48 126 74 126 82 118 C74 122 48 122 40 118 Z" />
+        <path class="ln" pathLength="1" d="M61 118 L61 92 L46 116 Z" />
+        <path class="ln" pathLength="1" d="M61 96 L70 116" />
+
+        {/* Waterline */}
+        <path class="ln wave" pathLength="1" d="M26 130 q7 -4 14 0 q7 4 14 0 q7 -4 14 0 q7 4 14 0 q7 -4 12 0" />
+      </svg>
+    )
+  }
+
+  {
+    showWord && (
+      <svg
+        class="emblem__word"
+        viewBox="0 0 320 92"
+        fill="none"
+        aria-hidden="true"
+      >
+        <text
+          x="160"
+          y="46"
+          text-anchor="middle"
+          fill="currentColor"
+          stroke="none"
+          class="emblem__wordmark"
+        >
+          DASTUR
+        </text>
+        {/* Diamond ornament divider */}
+        <g stroke="currentColor" stroke-width="1" opacity="0.8">
+          <line x1="96" y1="64" x2="150" y2="64" />
+          <path d="M160 59 L165 64 L160 69 L155 64 Z" fill="currentColor" stroke="none" />
+          <line x1="170" y1="64" x2="224" y2="64" />
+        </g>
+        <text
+          x="160"
+          y="83"
+          text-anchor="middle"
+          fill="currentColor"
+          stroke="none"
+          class="emblem__tagline"
+        >
+          CONTEMPORARY EMIRATI CUISINE
+        </text>
+      </svg>
+    )
+  }
+</span>
+
+<style>
+  .emblem {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.55em;
+    line-height: 1;
+  }
+  .emblem--wordmark {
+    gap: 0;
+  }
+  .emblem__icon {
+    width: auto;
+    height: 3.4em;
+  }
+  .emblem--icon .emblem__icon {
+    height: 100%;
+    width: 100%;
+  }
+  .emblem__word {
+    width: 100%;
+    height: auto;
+    max-width: 12em;
+  }
+  .emblem__wordmark {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 46px;
+    letter-spacing: 0.14em;
+    /* optical: shift for centered letter-spacing */
+    transform: translateX(0.07em);
+  }
+  .emblem__tagline {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.34em;
+    transform: translateX(0.17em);
+  }
+  /* Draw animation is owned by consumers (e.g. the Loader) via `.ln` paths. */
+</style>
