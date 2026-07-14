@@ -15,7 +15,6 @@ import Experience from '@/components/sections/Experience.astro';
 import Packaging from '@/components/sections/Packaging.astro';
 import WhyDastur from '@/components/sections/WhyDastur.astro';
 import Delivery from '@/components/sections/Delivery.astro';
-import Testimonials from '@/components/sections/Testimonials.astro';
 import Gallery from '@/components/sections/Gallery.astro';
 
 import type { Locale } from '@/lib/i18n';
@@ -37,7 +36,6 @@ const { locale } = Astro.props;
   <Packaging locale={locale} />
   <WhyDastur locale={locale} />
   <Delivery locale={locale} />
-  <Testimonials locale={locale} />
   <Gallery locale={locale} />
 
   <Footer slot="footer" locale={locale} />

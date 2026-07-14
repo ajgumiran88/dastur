@@ -40,7 +40,6 @@ src/
   config/        # ← edit business data & content here
     site.ts        contact, hours, areas, delivery platforms, socials, SEO
     menu.ts        menu categories + dishes (demo)
-    testimonials.ts guest experiences (demo)
     gallery.ts     gallery items (real packaging photos + demo tiles)
     nav.ts         navigation sections
   i18n/
@@ -51,7 +50,7 @@ src/
   components/
     ui/            Emblem, Motif, Button, DishCard, PlatformButton, LangSwitch, Section
     shell/         Loader, Nav, Footer
-    sections/      Hero, Story, Menu, Experience, Packaging, WhyDastur, Delivery, Testimonials, Gallery
+    sections/      Hero, Story, Menu, Experience, Packaging, WhyDastur, Delivery, Gallery
     Page.astro     one-page composition (rendered by both routes)
   layouts/Layout.astro   <head>, SEO, JSON-LD, fonts, skip-link, lang/dir
   lib/             i18n.ts, links.ts, seo.ts (tested)
@@ -69,7 +68,6 @@ scripts/
 | Any on-screen text | `src/i18n/en.json` (and `ar.json` for Arabic) |
 | Phone / WhatsApp / email / hours / areas / platforms / socials | `src/config/site.ts` |
 | Menu categories, dishes, prices, dietary tags | `src/config/menu.ts` |
-| Testimonials | `src/config/testimonials.ts` |
 | Gallery images | `src/config/gallery.ts` + add files to `src/assets/` |
 | Brand colors, type scale, spacing, motion | `src/styles/tokens.css` |
 | Dish / gallery photos | drop real images into `src/assets/menu` / `src/assets/gallery` and reference them (`image:` field). Demo tiles render automatically when no image is set. |
@@ -115,8 +113,6 @@ information. Nothing here is confirmed or approved.
       all currently marked `demo: true`
 - [ ] Approved Arabic translations (`src/i18n/ar.json` — currently machine-assisted draft)
 - [ ] Approved Arabic dish names
-- [ ] Real testimonials (`src/config/testimonials.ts`) — do **not** publish the
-      samples as verified reviews
 - [ ] Legal pages: Privacy Policy, Terms & Conditions, Allergen Notice
       (links in `src/config/site.ts → legal`)
 
