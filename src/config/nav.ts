@@ -7,9 +7,9 @@ export interface NavItem {
 
 export const nav: NavItem[] = [
   { id: 'home', key: 'nav.home' },
-  { id: 'story', key: 'nav.story' },
   { id: 'menu', key: 'nav.menu' },
-  { id: 'experience', key: 'nav.experience' },
   { id: 'delivery', key: 'nav.delivery' },
+  { id: 'story', key: 'nav.story' },
+  { id: 'experience', key: 'nav.experience' },
   { id: 'contact', key: 'nav.contact' },
 ];

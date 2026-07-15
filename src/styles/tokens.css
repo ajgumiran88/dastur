@@ -133,8 +133,32 @@
 
 /* ============================================================================
    Section themes — set on a wrapper to recolor the enclosed surface.
+   Each theme also carries a fine paper-grain surface (brand guidelines: every
+   page sits on a textured paper stock, never a flat fill).
    ========================================================================== */
-.section--light {
+.section--light,
+.section--sand,
+.section--indigo,
+.section--oud,
+.section--palm {
+  --grain-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.025' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  position: relative;
+}
+.section--light::before,
+.section--sand::before,
+.section--indigo::before,
+.section--oud::before,
+.section--palm::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--grain-url);
+  background-size: 300px 300px;
+}
+.section--light,
+.section--sand {
   --bg: var(--paper);
   --surface: var(--sand-50);
   --text: var(--oud-ink);
@@ -146,13 +170,11 @@
 }
 .section--sand {
   --bg: var(--sand-100);
-  --surface: var(--sand-50);
-  --text: var(--oud-ink);
-  --text-muted: var(--oud-muted);
-  --border: var(--sand-line);
-  --hairline: color-mix(in srgb, var(--oud) 16%, transparent);
-  color: var(--text);
-  background-color: var(--bg);
+}
+.section--light::before,
+.section--sand::before {
+  opacity: 0.1;
+  mix-blend-mode: multiply;
 }
 .section--indigo {
   --bg: var(--indigo);
@@ -183,4 +205,10 @@
   --hairline: color-mix(in srgb, var(--sand) 20%, transparent);
   color: var(--text);
   background-color: var(--bg);
+}
+.section--indigo::before,
+.section--oud::before,
+.section--palm::before {
+  opacity: 0.14;
+  mix-blend-mode: overlay;
 }
