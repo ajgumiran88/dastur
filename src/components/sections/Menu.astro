@@ -138,6 +138,15 @@ const dishData = menuCategories.flatMap((c) =>
         }
       });
     });
+
+    // Hook for the desktop-only pinned scroll showcase (signature.ts) to
+    // drive tab selection from scroll progress through the same code path
+    // that owns `hidden`/aria-selected — avoids two systems fighting over
+    // panel visibility.
+    (window as any).__menuSelectByIndex = (i: number) => {
+      const tab = tabs[i];
+      if (tab && tab.getAttribute('aria-selected') !== 'true') select(tab, false);
+    };
   }
 
   // --- Dish details modal ---
@@ -282,6 +291,21 @@ const dishData = menuCategories.flatMap((c) =>
   /* Without JS, show every panel (tabs are non-functional but harmless). */
   html:not(.js) .menu__panel[hidden] {
     display: block;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .menu__panel:not([hidden]) {
+      animation: menu-panel-in 0.4s var(--ease-out);
+    }
+  }
+  @keyframes menu-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   .menu__grid {
     display: grid;

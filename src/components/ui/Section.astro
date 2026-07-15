@@ -28,7 +28,9 @@ const {
   ]}
   aria-labelledby={labelledby}
 >
-  <slot />
+  <div class="section__content">
+    <slot />
+  </div>
 </section>
 
 <style>
@@ -38,5 +40,9 @@ const {
   }
   .section--pad {
     padding-block: var(--space-section);
+  }
+  .section__content {
+    position: relative;
+    z-index: 1;
   }
 </style>
