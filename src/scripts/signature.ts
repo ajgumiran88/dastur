@@ -1,8 +1,8 @@
 /* ============================================================================
    DASTUR — signature scroll animations (GSAP + ScrollTrigger).
-   Bespoke, heavier motion for the four showpiece sections (Hero, Menu,
-   Delivery, Packaging). Everything else keeps the plain reveal system in
-   animations.ts. Desktop-enhanced only: on touch/narrow viewports and under
+   Bespoke, heavier motion for the showpiece sections (Hero, Delivery,
+   Packaging). Everything else keeps the plain reveal system in animations.ts.
+   Desktop-enhanced only: on touch/narrow viewports and under
    prefers-reduced-motion, this module builds nothing and the baseline
    [data-animate] fade-up (already applied to the same elements) is what shows.
    ========================================================================== */
@@ -15,7 +15,6 @@ const desktop = matchMedia('(min-width: 900px)').matches;
 if (!reduce && desktop) {
   gsap.registerPlugin(ScrollTrigger);
   heroCinematic();
-  menuShowcase();
   deliveryCta();
   packagingReveal();
 }
@@ -74,42 +73,6 @@ function heroCinematic() {
     .to(cta, { y: -70, opacity: 0, duration: 0.92, ease: 'none' }, 0.08)
     .to(skyline, { y: -30, scale: 1.12, opacity: 0, duration: 1, ease: 'none' }, 0)
     .to(decos, { y: -160, opacity: 0, duration: 1, ease: 'none' }, 0);
-}
-
-/* --- Menu: pinned, scroll-scrubbed category showcase ------------------------
-   Panel switching stays owned by Menu.astro's own `select()` (the accessible
-   tab/panel/hidden-attribute logic) — this only drives *which* index is
-   selected as the section pins and the user scrolls, via the
-   `__menuSelectByIndex` hook Menu.astro exposes for this purpose. */
-function menuShowcase(retries = 5) {
-  const section = document.querySelector<HTMLElement>('#menu');
-  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('#menu [role="tab"]'));
-  const selectByIndex = (window as any).__menuSelectByIndex as ((i: number) => void) | undefined;
-  if (!section || tabs.length < 2) return;
-  if (!selectByIndex) {
-    // Menu.astro's own module script sets this hook; document order should
-    // make it available already, but retry briefly rather than assume.
-    if (retries > 0) window.setTimeout(() => menuShowcase(retries - 1), 50);
-    return;
-  }
-
-  ScrollTrigger.create({
-    trigger: section,
-    start: 'top top+=76',
-    end: () => `+=${tabs.length * 380}`,
-    pin: true,
-    pinSpacing: true,
-    scrub: 0.4,
-    snap: {
-      snapTo: 1 / (tabs.length - 1),
-      duration: 0.35,
-      ease: 'power1.inOut',
-    },
-    onUpdate(self) {
-      const i = Math.min(tabs.length - 1, Math.round(self.progress * (tabs.length - 1)));
-      selectByIndex(i);
-    },
-  });
 }
 
 /* --- Delivery: bold weighted entrance on the order CTAs --------------------- */

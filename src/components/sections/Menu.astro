@@ -138,15 +138,6 @@ const dishData = menuCategories.flatMap((c) =>
         }
       });
     });
-
-    // Hook for the desktop-only pinned scroll showcase (signature.ts) to
-    // drive tab selection from scroll progress through the same code path
-    // that owns `hidden`/aria-selected — avoids two systems fighting over
-    // panel visibility.
-    (window as any).__menuSelectByIndex = (i: number) => {
-      const tab = tabs[i];
-      if (tab && tab.getAttribute('aria-selected') !== 'true') select(tab, false);
-    };
   }
 
   // --- Dish details modal ---
