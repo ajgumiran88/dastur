@@ -117,7 +117,11 @@ const orderHref = orderWaLink(locale);
   const sections = links
     .map((l) => document.getElementById(l.dataset.navlink!))
     .filter((el): el is HTMLElement => !!el);
-  if (sections.length && 'IntersectionObserver' in window) {
+  if (
+    !document.querySelector('[data-horizontal-scroll]') &&
+    sections.length &&
+    'IntersectionObserver' in window
+  ) {
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {

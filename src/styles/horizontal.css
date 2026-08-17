@@ -1,0 +1,447 @@
+/* DASTUR horizontal edition — full-viewport editorial journey. */
+:root {
+  --hz-ink: #111714;
+  --hz-forest: #17351f;
+  --hz-cream: #f3eddf;
+  --hz-coral: #b94f38;
+  --hz-sage: #aebba6;
+  --hz-cobalt: #263c59;
+  --hz-gold: #d4a84f;
+  --hz-plum: #4b2436;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--hz-ink);
+}
+
+#main {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.horizontal-scroll {
+  display: flex;
+  width: 100vw;
+  height: 100dvh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-scroll > section,
+.horizontal-scroll > footer {
+  flex: 0 0 100vw;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 0 !important;
+  padding-block: clamp(6.5rem, 12vh, 8rem) clamp(5rem, 9vh, 6.5rem) !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  scrollbar-width: thin;
+}
+
+.horizontal-scroll > section::before,
+.horizontal-scroll > footer::before {
+  display: none;
+}
+
+.horizontal-scroll .container {
+  max-width: 1380px;
+}
+
+.horizontal-scroll h1,
+.horizontal-scroll h2,
+.horizontal-scroll h3 {
+  letter-spacing: -0.035em;
+}
+
+.horizontal-scroll h2 {
+  font-size: clamp(2.5rem, 5vw, 5.75rem);
+  line-height: 0.9;
+}
+
+.horizontal-scroll .eyebrow {
+  font-size: 0.67rem;
+  letter-spacing: 0.32em;
+}
+
+.horizontal-scroll [data-animate] {
+  transform: translateX(44px);
+}
+
+html.animate-ready .horizontal-scroll [data-animate].is-inview {
+  transform: translateX(0);
+}
+
+/* Persistent journey controls */
+.journey {
+  position: fixed;
+  z-index: 120;
+  inset-inline-end: clamp(1.2rem, 3vw, 3rem);
+  inset-block-end: 1.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 48px;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 999px;
+  color: white;
+  background: rgb(12 18 15 / 0.76);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.22);
+}
+
+.journey__button {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  color: white;
+  background: rgb(255 255 255 / 0.1);
+  transition: background-color 180ms ease, transform 180ms ease, opacity 180ms ease;
+}
+
+.journey__button:hover:not(:disabled) {
+  background: var(--hz-coral);
+  transform: scale(1.06);
+}
+
+.journey__button:disabled {
+  opacity: 0.3;
+}
+
+.journey__count {
+  display: flex;
+  gap: 0.3rem;
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+.journey__line {
+  width: clamp(54px, 7vw, 110px);
+  height: 2px;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.2);
+}
+
+.journey__line span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--hz-gold);
+  transform: scaleX(0.111);
+  transform-origin: left;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Navigation becomes a compact editorial rail rather than the old transparent bar. */
+.nav {
+  color: white !important;
+  background: linear-gradient(to bottom, rgb(12 18 15 / 0.86), transparent) !important;
+}
+
+.nav__bar {
+  min-height: 84px !important;
+}
+
+.nav__link {
+  font-size: 0.72rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.13em !important;
+}
+
+.nav__link::after {
+  height: 3px !important;
+  background: var(--hz-coral) !important;
+}
+
+/* 01 — Opening statement */
+#home {
+  isolation: isolate;
+  align-items: flex-end;
+  background-color: var(--hz-forest);
+  background-image:
+    linear-gradient(90deg, rgb(6 16 10 / 0.22), rgb(6 16 10 / 0.02)),
+    url('/images/green-pattern.png');
+}
+
+#home::after {
+  content: '01';
+  position: absolute;
+  inset-inline-end: 2vw;
+  inset-block-start: 8vh;
+  z-index: 0;
+  color: rgb(255 255 255 / 0.055);
+  font-family: var(--font-display);
+  font-size: min(48vw, 44rem);
+  line-height: 0.75;
+}
+
+#home .hero__bg,
+#home .hero__scroll {
+  display: none;
+}
+
+#home .hero__inner {
+  gap: 1.15rem;
+  padding-block-end: clamp(2rem, 9vh, 7rem);
+}
+
+#home .hero__title {
+  max-width: none;
+  font-size: clamp(1.25rem, 4.6vw, 5rem);
+  white-space: nowrap;
+}
+
+#home .hero__lead {
+  max-width: 48ch;
+}
+
+/* 02 — Menu as a contemporary printed bill of fare. */
+#menu {
+  --text: #251c16;
+  --text-muted: #75675b;
+  --hairline: rgb(37 28 22 / 0.16);
+  --surface-raised: #faf6ee;
+  color: var(--text);
+  background:
+    linear-gradient(90deg, var(--hz-coral) 0 12px, transparent 12px),
+    var(--hz-cream);
+}
+
+#menu .container {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 2fr);
+  grid-template-areas:
+    'head tabs'
+    'note panels';
+  gap: 1.25rem clamp(2rem, 5vw, 6rem);
+}
+
+#menu .menu__head { grid-area: head; }
+#menu .menu__title { font-size: clamp(2.5rem, 4vw, 4.6rem); }
+#menu .menu__intro { font-size: 0.92rem; line-height: 1.5; }
+#menu .menu__demo { grid-area: note; margin-top: 0; align-self: start; }
+#menu .menu__tabs { grid-area: tabs; margin-top: 0; }
+#menu .menu__panels { grid-area: panels; margin-top: 0; }
+#menu .menu__panelTitle { display: none; }
+#menu .menu__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--hairline); }
+#menu .dish { border: 0; border-bottom: 1px solid var(--hairline); border-radius: 0; box-shadow: none; background: transparent; }
+#menu .dish:nth-child(odd) { border-inline-end: 1px solid var(--hairline); }
+#menu .dish__media { display: none; }
+#menu .dish__body { padding: 0.7rem 1rem; }
+#menu .dish__name { font-size: 1.08rem; }
+#menu .dish__alt { font-size: 0.72rem; }
+#menu .dish__desc { margin-block: 0.25rem 0.4rem; font-size: 0.75rem; line-height: 1.4; }
+#menu .dish__tags { display: none; }
+#menu .dish__actions { gap: 0.4rem; }
+#menu .dish__details,
+#menu .dish__order { min-height: 34px; font-size: 0.67rem; }
+#menu .dish__amount { font-size: 1.2rem; }
+#menu .menu__demo { font-size: 0.67rem; line-height: 1.4; padding: 0.65rem 0.8rem; }
+#menu .menu__tab { border-radius: 0; border: 0; border-bottom: 2px solid transparent; }
+#menu .menu__tab[aria-selected='true'] { color: var(--hz-coral); background: transparent; border-color: var(--hz-coral); }
+
+/* 03 — Delivery dashboard */
+#delivery {
+  --bg: var(--hz-cobalt);
+  --surface: #314b6d;
+  background: var(--hz-cobalt);
+}
+
+#delivery .del {
+  display: grid;
+  grid-template-columns: 0.72fr 1.28fr;
+  grid-template-areas:
+    'head paths'
+    'platforms facts';
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+#delivery .del__head { grid-area: head; text-align: start; align-items: flex-start; margin: 0; }
+#delivery .del__paths { grid-area: paths; margin-top: 0; }
+#delivery .del__platforms { grid-area: platforms; margin-top: 0; text-align: start; }
+#delivery .del__facts { grid-area: facts; margin-top: 0; }
+#delivery .path { border-radius: 24px; min-height: 116px; }
+#delivery .del__platformGrid { margin-inline: 0; grid-template-columns: repeat(2, 1fr); }
+#delivery .del__platformsLabel { text-align: start; }
+
+/* 04 — Story, bold editorial split. */
+#story {
+  --text: #fff7e9;
+  --text-muted: rgb(255 247 233 / 0.75);
+  --hairline: rgb(255 247 233 / 0.24);
+  color: var(--text);
+  background: var(--hz-coral);
+}
+
+#story .story { grid-template-columns: 1.2fr 0.8fr; }
+#story .story__text { gap: 0.7rem; }
+#story .story__title { font-size: clamp(2.5rem, 4vw, 4.6rem); }
+#story .story__title,
+#story .symbol__title { color: var(--text); }
+#story .story__body { gap: 0.55rem; font-size: 0.78rem; }
+#story .story__body p { line-height: 1.48; }
+#story .story__symbols { margin-top: 0.25rem; }
+#story .story__symbols ul { grid-template-columns: repeat(3, 1fr); gap: 0.7rem; }
+#story .symbol { gap: 0.55rem; }
+#story .symbol__ico { width: 34px; height: 34px; }
+#story .symbol__title { font-size: 0.9rem; }
+#story .symbol__desc { font-size: 0.66rem; line-height: 1.35; }
+#story .story__figure { aspect-ratio: 5 / 4; max-width: 560px; clip-path: none; border-radius: 0; transform: rotate(2deg); }
+#story .story__arch { display: none; }
+#story .story__caption { border-radius: 0; background: var(--hz-ink); }
+#story .symbol__ico { border-radius: 50%; color: var(--hz-gold); }
+
+/* 05 — Experience timeline */
+#experience {
+  --bg: var(--hz-sage);
+  --text: var(--hz-ink);
+  --text-muted: rgb(17 23 20 / 0.68);
+  color: var(--text);
+  background: var(--hz-sage);
+  padding-block-end: 4rem !important;
+}
+
+#experience .exp__head { margin-bottom: clamp(2rem, 5vh, 3.5rem); }
+#experience .exp__title,
+#experience .exp__stepTitle { color: var(--hz-ink); }
+#experience .exp__intro,
+#experience .exp__stepDesc { color: var(--text-muted); }
+#experience .exp__steps { grid-template-columns: repeat(4, 1fr); gap: 0; }
+#experience .exp__step { min-height: 300px; padding: 3rem 1.5rem 1.5rem; border: 1px solid rgb(17 23 20 / 0.16); border-inline-end: 0; }
+#experience .exp__step:last-child { border-inline-end: 1px solid rgb(17 23 20 / 0.16); }
+#experience .exp__step:nth-child(even) { transform: translateY(2rem); background: rgb(255 255 255 / 0.22); }
+#experience .exp__ico { border: 0; border-radius: 50%; color: var(--hz-coral); background: var(--hz-cream); }
+#experience .exp__num { inset: 1rem auto auto 1.5rem; color: var(--hz-coral); }
+
+/* 06 — Packaging showroom */
+#packaging {
+  --bg: var(--hz-ink);
+  background:
+    radial-gradient(circle at 80% 30%, rgb(212 168 79 / 0.16), transparent 30%),
+    var(--hz-ink);
+}
+
+#packaging .pkg { grid-template-columns: 0.72fr 1.28fr; }
+#packaging .pkg__title { max-width: 9ch; }
+#packaging .pkg__main { border-radius: 0; transform: rotate(-1.5deg); }
+#packaging .pkg__accent { border-radius: 0; border-color: var(--hz-gold); }
+
+/* 07 — Gallery contact sheet */
+#gallery {
+  --text: var(--hz-cream);
+  --text-muted: rgb(243 237 223 / 0.72);
+  color: var(--text);
+  background: var(--hz-plum);
+}
+
+#gallery .gal__head { float: inline-start; width: 25%; margin-inline-end: 4%; }
+#gallery .gal__title { color: var(--text); }
+#gallery .gal__intro { color: var(--text-muted); }
+#gallery .gal__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.65rem; columns: initial; }
+#gallery .gal__item { aspect-ratio: 4 / 3; margin: 0; border: 0; border-radius: 0; }
+
+/* 08 — Reasons as an oversized manifesto. */
+#why {
+  --text: var(--hz-ink);
+  --text-muted: rgb(17 23 20 / 0.67);
+  --hairline: rgb(17 23 20 / 0.25);
+  color: var(--text);
+  background: var(--hz-gold);
+}
+
+#why .why { grid-template-columns: 0.65fr 1.35fr; }
+#why .why__title,
+#why .why__itemTitle { color: var(--text); }
+#why .why__item { padding: 1.15rem 0; }
+#why .why__index { color: var(--hz-coral); }
+
+/* 09 — Contact finale */
+#contact {
+  background: var(--hz-ink);
+}
+
+#contact .footer__grid { gap: clamp(2rem, 4vw, 4rem); }
+#contact .footer__brand { gap: 0.75rem; }
+#contact .footer__statement { font-size: 0.75rem; line-height: 1.45; }
+#contact .footer__grid { gap: 1.5rem 2rem; }
+#contact .footer__h { margin-bottom: 0.6rem; }
+#contact .footer__h--follow { margin-top: 0.8rem; }
+#contact .footer__list { gap: 0.35rem; font-size: 0.76rem; }
+#contact .footer__meta { margin-top: 0.8rem; gap: 0.5rem; }
+#contact .footer__allergen { margin-top: 1rem; padding-top: 0.75rem; }
+#contact .footer__tagline { margin-block: 1rem; padding-block: 0; gap: 0.5rem; }
+#contact .footer__taglineText { font-size: 1.25rem; }
+#contact .footer__bottom { padding-top: 0.75rem; }
+
+@media (max-width: 899px) {
+  .horizontal-scroll > section,
+  .horizontal-scroll > footer {
+    padding-block: 6rem 5.5rem !important;
+  }
+
+  .journey {
+    inset-inline: 50% auto;
+    transform: translateX(-50%);
+  }
+
+  [dir='rtl'] .journey {
+    transform: translateX(50%);
+  }
+
+  #menu .container,
+  #delivery .del {
+    display: block;
+  }
+
+  #menu .menu__demo,
+  #delivery .del__facts {
+    display: none;
+  }
+
+  #menu .menu__tabs,
+  #menu .menu__panels,
+  #delivery .del__paths,
+  #delivery .del__platforms {
+    margin-top: 1.5rem;
+  }
+
+  #menu .menu__grid { grid-template-columns: 1fr; }
+  #menu .dish:nth-child(odd) { border-inline-end: 0; }
+  #story .story,
+  #packaging .pkg,
+  #why .why { grid-template-columns: 1fr; }
+  #story .story__media,
+  #packaging .pkg__accent { display: none; }
+  #experience .exp__steps { grid-template-columns: repeat(2, 1fr); }
+  #experience .exp__step { min-height: 240px; }
+  #gallery .gal__head { float: none; width: auto; margin-inline-end: 0; }
+  #gallery .gal__grid { grid-template-columns: repeat(2, 1fr); }
+  #contact { height: 100dvh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .horizontal-scroll { scroll-behavior: auto; }
+  .journey__line span,
+  .journey__button { transition: none; }
+}

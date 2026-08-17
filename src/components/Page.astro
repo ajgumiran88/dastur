@@ -29,14 +29,22 @@ const { locale } = Astro.props;
   <Loader slot="loader" locale={locale} />
   <Nav slot="nav" locale={locale} />
 
-  <Hero locale={locale} />
-  <Menu locale={locale} />
-  <Delivery locale={locale} />
-  <Story locale={locale} />
-  <Experience locale={locale} />
-  <Packaging locale={locale} />
-  <Gallery locale={locale} />
-  <WhyDastur locale={locale} />
+  <div class="horizontal-scroll" data-horizontal-scroll>
+    <Hero locale={locale} />
+    <Menu locale={locale} />
+    <Delivery locale={locale} />
+    <Story locale={locale} />
+    <Experience locale={locale} />
+    <Packaging locale={locale} />
+    <Gallery locale={locale} />
+    <WhyDastur locale={locale} />
+    <Footer locale={locale} />
+  </div>
 
-  <Footer slot="footer" locale={locale} />
+  <div class="journey" aria-label="Page navigation">
+    <button class="journey__button" type="button" data-journey-prev aria-label="Previous section">←</button>
+    <p class="journey__count" aria-live="polite"><span data-journey-current>01</span><span>/</span><span data-journey-total>09</span></p>
+    <span class="journey__line" aria-hidden="true"><span data-journey-progress></span></span>
+    <button class="journey__button" type="button" data-journey-next aria-label="Next section">→</button>
+  </div>
 </Layout>
