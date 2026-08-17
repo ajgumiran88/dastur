@@ -56,8 +56,11 @@ const { locale } = Astro.props;
     align-items: center;
     overflow: clip;
     padding-block: calc(var(--nav-h) + 3rem) 6rem;
-    background:
-      linear-gradient(155deg, var(--indigo) 0%, var(--oud-800) 62%, var(--oud) 100%);
+    background-color: var(--palm-700);
+    background-image: url('/images/green-pattern.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     color: var(--sand);
   }
 
@@ -135,9 +138,10 @@ const { locale } = Astro.props;
     color: var(--brass-300);
   }
   .hero__title {
-    font-size: var(--fs-display);
+    font-size: clamp(1.5rem, 5.2vw, 4.8rem);
     line-height: 1.02;
-    max-width: 16ch;
+    max-width: none;
+    white-space: nowrap;
     color: var(--sand);
     font-weight: 500;
   }

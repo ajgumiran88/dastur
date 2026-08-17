@@ -1,12 +1,10 @@
 ---
-import { Image } from 'astro:assets';
 import Section from '@/components/ui/Section.astro';
 import Motif from '@/components/ui/Motif.astro';
 import PlatformButton from '@/components/ui/PlatformButton.astro';
 import { site } from '@/config/site';
 import { t, type Locale } from '@/lib/i18n';
 import { orderWaLink, telLink } from '@/lib/links';
-import skyline from '@/assets/illustration/skyline.png';
 
 interface Props {
   locale: Locale;
@@ -24,10 +22,6 @@ const facts = [
 ---
 
 <Section id="delivery" theme="indigo" labelledby="del-title">
-  <div class="del__skyline" aria-hidden="true">
-    <Image src={skyline} alt="" widths={[900, 1600]} sizes="100vw" loading="lazy" />
-  </div>
-
   <div class="container del">
     <div class="del__head" data-animate>
       <p class="eyebrow"><Motif name="diamond" />{t(locale, 'delivery.eyebrow')}</p>
@@ -105,20 +99,8 @@ const facts = [
     position: relative;
     overflow: clip;
   }
-  .del__skyline {
-    position: absolute;
-    inset-inline: 0;
-    inset-block-end: 0;
-    line-height: 0;
-    opacity: 0.08;
-    filter: brightness(0) invert(1);
-    -webkit-mask-image: linear-gradient(to top, black 40%, transparent 90%);
-    mask-image: linear-gradient(to top, black 40%, transparent 90%);
-    pointer-events: none;
-  }
-  .del__skyline :global(img) {
-    width: 100%;
-    height: auto;
+  #delivery::before {
+    display: none;
   }
   .del {
     position: relative;
@@ -228,9 +210,8 @@ const facts = [
     margin-inline: auto;
   }
   .del__platformGrid :global(.platform) {
-    color: var(--sand);
     border-color: color-mix(in srgb, var(--sand) 26%, transparent);
-    background: color-mix(in srgb, var(--indigo-800) 50%, transparent);
+    background: var(--paper);
   }
 
   .del__facts {
