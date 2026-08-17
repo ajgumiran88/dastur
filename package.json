@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/ajgumiran88/dastur#readme",
   "dependencies": {
+    "@builder.io/sdk": "^6.3.1",
     "astro": "^7.0.9",
     "gsap": "^3.15.0"
   },
