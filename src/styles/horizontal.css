@@ -505,6 +505,15 @@ html.animate-ready .horizontal-scroll [data-animate].is-inview {
     transform: translateX(50%);
   }
 
+  #home {
+    align-items: flex-start;
+  }
+
+  #home .hero__inner {
+    padding-block-start: 1.25rem;
+    padding-block-end: 2rem;
+  }
+
   #menu .container,
   #delivery .del {
     display: block;
