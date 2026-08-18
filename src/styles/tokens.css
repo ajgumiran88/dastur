@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Apparat';
+  src: url('/fonts/apparat.otf') format('opentype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 /* ============================================================================
    DASTUR — Design Tokens
    Single source of truth for color, type, space, motion, layout.
@@ -53,9 +61,9 @@
   --on-dark-muted: color-mix(in srgb, var(--sand) 72%, transparent);
 
   /* --- Typography --- */
-  --font-display: 'Cormorant Garamond Variable', 'Cormorant Garamond', Georgia,
-    'Times New Roman', serif;
-  --font-body: 'Alexandria', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-display: 'Apparat', 'Cormorant Garamond Variable', Georgia, serif;
+  --font-body: 'Apparat', 'Alexandria', 'Segoe UI', system-ui, -apple-system,
+    sans-serif;
   --font-arabic-display: 'Tajawal', 'Alexandria', 'Segoe UI', sans-serif;
 
   /* Fluid type scale (min → max across 360–1440px viewport) */
