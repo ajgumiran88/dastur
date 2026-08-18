@@ -23,6 +23,15 @@ const { locale } = Astro.props;
   </div>
 
   <div class="container hero__inner">
+    <img
+      class="hero__logo"
+      src="/images/dastur-nav-logo.png"
+      alt="DASTUR"
+      width="1536"
+      height="1024"
+      data-animate
+      data-animate-delay="0"
+    />
     <p class="eyebrow hero__eyebrow" data-animate data-animate-delay="0">
       <Motif name="diamond" />{t(locale, 'hero.eyebrow')}
     </p>
@@ -129,6 +138,12 @@ const { locale } = Astro.props;
     align-items: flex-start;
     gap: 1.5rem;
   }
+  .hero__logo {
+    width: clamp(112px, 20vw, 150px);
+    height: clamp(112px, 20vw, 150px);
+    object-fit: contain;
+    object-position: center;
+  }
   .hero__eyebrow {
     color: var(--brass-300);
   }
@@ -138,7 +153,7 @@ const { locale } = Astro.props;
     color: var(--brass-300);
   }
   .hero__title {
-    font-size: clamp(1.5rem, 5.2vw, 4.8rem);
+    font-size: clamp(1.125rem, 4vw, 3rem);
     line-height: 1.02;
     max-width: none;
     white-space: nowrap;

@@ -1,8 +1,48 @@
 @font-face {
-  font-family: 'Apparat';
-  src: url('/fonts/apparat.otf') format('opentype');
+  font-family: 'Book Antiqua';
+  src: url('/fonts/book-antiqua-regular.ttf') format('truetype');
   font-style: normal;
   font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Book Antiqua';
+  src: url('/fonts/book-antiqua-bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Book Antiqua';
+  src: url('/fonts/book-antiqua-italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Book Antiqua';
+  src: url('/fonts/book-antiqua-bold-italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Book Antiqua Extreme Lefty';
+  src: url('/fonts/book-antiqua-extreme-lefty.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Alexandria';
+  src: url('/fonts/alexandria-variable.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
   font-display: swap;
 }
 
@@ -61,10 +101,9 @@
   --on-dark-muted: color-mix(in srgb, var(--sand) 72%, transparent);
 
   /* --- Typography --- */
-  --font-display: 'Apparat', 'Cormorant Garamond Variable', Georgia, serif;
-  --font-body: 'Apparat', 'Alexandria', 'Segoe UI', system-ui, -apple-system,
-    sans-serif;
-  --font-arabic-display: 'Tajawal', 'Alexandria', 'Segoe UI', sans-serif;
+  --font-display: 'Book Antiqua', Georgia, serif;
+  --font-body: 'Alexandria', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-arabic-display: 'GE SS Two', 'Alexandria', 'Segoe UI', sans-serif;
 
   /* Fluid type scale (min → max across 360–1440px viewport) */
   --fs-eyebrow: clamp(0.72rem, 0.68rem + 0.2vw, 0.82rem);
