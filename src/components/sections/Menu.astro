@@ -40,44 +40,48 @@ const dishData = menuCategories.flatMap((c) =>
       <Motif name="diamond" />{t(locale, 'menu.demoNote')}
     </p>
 
-    <div class="menu__tabs" role="tablist" aria-label={t(locale, 'menu.title')}>
-      {
-        menuCategories.map((cat, i) => (
-          <button
-            class="menu__tab"
-            role="tab"
-            id={`tab-${cat.id}`}
-            aria-controls={`panel-${cat.id}`}
-            aria-selected={i === 0 ? 'true' : 'false'}
-            tabindex={i === 0 ? '0' : '-1'}
-            data-tab={cat.id}
-          >
-            {t(locale, cat.key)}
-          </button>
-        ))
-      }
-    </div>
+    <div class="menu__content">
+      <div class="menu__tabsArea">
+        <div class="menu__tabs" role="tablist" aria-label={t(locale, 'menu.title')}>
+          {
+            menuCategories.map((cat, i) => (
+              <button
+                class="menu__tab"
+                role="tab"
+                id={`tab-${cat.id}`}
+                aria-controls={`panel-${cat.id}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? '0' : '-1'}
+                data-tab={cat.id}
+              >
+                {t(locale, cat.key)}
+              </button>
+            ))
+          }
+        </div>
+      </div>
 
-    <div class="menu__panels">
-      {
-        menuCategories.map((cat, i) => (
-          <div
-            class="menu__panel"
-            role="tabpanel"
-            id={`panel-${cat.id}`}
-            aria-labelledby={`tab-${cat.id}`}
-            data-panel={cat.id}
-            hidden={i !== 0}
-          >
-            <h3 class="menu__panelTitle">{t(locale, cat.key)}</h3>
-            <div class="menu__grid">
-              {cat.dishes.map((dish) => (
-                <DishCard dish={dish} locale={locale} accent={cat.accent} motif={cat.motif} />
-              ))}
+      <div class="menu__panels">
+        {
+          menuCategories.map((cat, i) => (
+            <div
+              class="menu__panel"
+              role="tabpanel"
+              id={`panel-${cat.id}`}
+              aria-labelledby={`tab-${cat.id}`}
+              data-panel={cat.id}
+              hidden={i !== 0}
+            >
+              <h3 class="menu__panelTitle">{t(locale, cat.key)}</h3>
+              <div class="menu__grid">
+                {cat.dishes.map((dish) => (
+                  <DishCard dish={dish} locale={locale} accent={cat.accent} motif={cat.motif} />
+                ))}
+              </div>
             </div>
-          </div>
-        ))
-      }
+          ))
+        }
+      </div>
     </div>
   </div>
 
@@ -138,6 +142,7 @@ const dishData = menuCategories.flatMap((c) =>
         }
       });
     });
+
   }
 
   // --- Dish details modal ---
@@ -232,28 +237,22 @@ const dishData = menuCategories.flatMap((c) =>
   }
 
   .menu__tabs {
-    display: flex;
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.4rem;
     margin-top: 2.2rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: 0.5rem;
-    -webkit-overflow-scrolling: touch;
-  }
-  .menu__tabs::-webkit-scrollbar {
-    display: none;
   }
   .menu__tab {
-    flex-shrink: 0;
-    padding: 0.6em 1.15em;
+    width: 100%;
+    padding: 0.6em 0.75em;
     min-height: 44px;
     border-radius: var(--r-pill);
     border: 1px solid var(--hairline);
     font-size: var(--fs-small);
+    line-height: 1.2;
     letter-spacing: 0.02em;
     color: var(--text-muted);
-    white-space: nowrap;
+    white-space: normal;
     transition:
       background-color var(--dur-2) var(--ease-out),
       color var(--dur-2) var(--ease-out),
@@ -267,6 +266,20 @@ const dishData = menuCategories.flatMap((c) =>
     background: var(--oud);
     color: var(--sand);
     border-color: var(--oud);
+  }
+
+  @media (min-width: 640px) {
+    .menu__tabs {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .menu__tabs {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+    .menu__tab {
+      font-size: 0.68rem;
+    }
   }
 
   .menu__panels {

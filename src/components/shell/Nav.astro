@@ -3,23 +3,18 @@ import Emblem from '@/components/ui/Emblem.astro';
 import Button from '@/components/ui/Button.astro';
 import LangSwitch from '@/components/ui/LangSwitch.astro';
 import { nav } from '@/config/nav';
-import { t, localizedPath, type Locale } from '@/lib/i18n';
+import { t, type Locale } from '@/lib/i18n';
 import { orderWaLink } from '@/lib/links';
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
-const home = localizedPath(locale);
 const orderHref = orderWaLink(locale);
 ---
 
 <header class="nav" data-nav>
   <div class="nav__bar container">
-    <a class="nav__logo" href={home} aria-label="DASTUR — home">
-      <Emblem variant="wordmark" tone="current" locale={locale} />
-    </a>
-
     <nav class="nav__links" aria-label="Primary">
       <ul role="list">
         {
@@ -223,15 +218,6 @@ const orderHref = orderWaLink(locale);
     gap: 1.5rem;
     min-height: var(--nav-h);
   }
-  .nav__logo {
-    flex-shrink: 0;
-    width: clamp(120px, 14vw, 152px);
-    color: currentColor;
-  }
-  .nav__logo :global(.emblem__word) {
-    max-width: 100%;
-  }
-
   .nav__links {
     display: none;
   }
