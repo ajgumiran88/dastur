@@ -38,6 +38,31 @@ export interface MenuCategory {
 }
 
 const AED = 'AED';
+const dishImages: Record<string, string> = {
+  'machboos-laham': '/images/menu-food/rice.jpg',
+  'machboos-robyan': '/images/menu-food/rice.jpg',
+  'biryani-dajaj': '/images/menu-food/rice.jpg',
+  'madrooba-rice': '/images/menu-food/rice.jpg',
+  harees: '/images/menu-food/stew.jpg',
+  thereed: '/images/menu-food/stew.jpg',
+  salona: '/images/menu-food/stew.jpg',
+  'mixed-grill': '/images/menu-food/grill.jpg',
+  'samak-mashwi': '/images/menu-food/fish.jpg',
+  'lamb-ouzi': '/images/menu-food/grill.jpg',
+  regag: '/images/menu-food/breakfast.jpg',
+  balaleet: '/images/menu-food/breakfast.jpg',
+  fattoush: '/images/menu-food/salad.jpg',
+  luqaimat: '/images/menu-food/dessert.jpg',
+  khabees: '/images/menu-food/dessert.jpg',
+  'date-pudding': '/images/menu-food/dessert.jpg',
+  karak: '/images/menu-food/tea.jpg',
+  gahwa: '/images/menu-food/coffee-dates.jpg',
+  jallab: '/images/menu-food/tea.jpg',
+  'family-feast': '/images/menu-food/grill.jpg',
+  'majlis-box': '/images/menu-food/coffee-dates.jpg',
+  'breakfast-box': '/images/menu-food/breakfast.jpg',
+};
+
 const d = (
   id: string,
   en: string,
@@ -53,6 +78,7 @@ const d = (
   price,
   currency: AED,
   tags,
+  image: dishImages[id],
   demo: true,
 });
 
