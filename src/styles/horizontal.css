@@ -343,7 +343,7 @@ html.animate-ready .horizontal-scroll [data-animate].is-inview {
 }
 
 #delivery .del__head { text-align: center; align-items: center; margin-inline: auto; }
-#delivery .del__title { font-size: clamp(3rem, 6vw, 5.8rem); line-height: 0.95; }
+#delivery .del__title { font-size: clamp(2.7rem, 5.4vw, 5.1rem); line-height: 0.95; }
 #delivery .del__body { font-size: clamp(0.9rem, 1.4vw, 1.1rem); }
 #delivery .del__direct { width: min(100%, 620px); margin: 2rem auto 0; }
 #delivery .del__sectionLabel {
@@ -368,17 +368,28 @@ html.animate-ready .horizontal-scroll [data-animate].is-inview {
   background: rgb(7 31 28 / 0.62);
 }
 #delivery .path--primary:hover { background: rgb(10 43 37 / 0.78); border-color: var(--brass-300); }
-#delivery .path__title { font-size: clamp(1.4rem, 3vw, 2rem); }
+#delivery .path--primary .path__ico {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  color: white;
+  background: #25d366;
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 0.92);
+}
+#delivery .path--primary .path__ico svg { width: 38px; height: 38px; stroke-width: 1.9; }
+#delivery .path--primary .path__text { flex: 0 1 auto; }
+#delivery .path__title { font-family: var(--font-body); font-size: clamp(1.65rem, 3vw, 2.35rem); font-weight: 700; }
 #delivery .del__platforms { width: min(100%, 760px); margin: 1.8rem auto 0; text-align: center; }
 #delivery .del__platformGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 #delivery .del__platformGrid .platform {
-  min-height: 74px;
+  min-height: 94px;
+  padding-inline: 1.75rem;
   border-color: color-mix(in srgb, var(--brass-300) 25%, transparent);
   background: rgb(7 31 28 / 0.48);
 }
 #delivery .platform__logo[src*='careem'] { filter: brightness(2.1) saturate(1.2); }
 #delivery .platform__logo[src*='noon-food'] { filter: brightness(1.8) contrast(1.08); }
-#delivery .platform__logo[src*='talabat'] { transform: scale(1.8); }
+#delivery .platform__logo[src*='talabat'] { transform: scale(3.4); }
 #delivery .del__facts { display: block; width: min(100%, 1080px); margin: 2rem auto 0; }
 #delivery .del__factGrid {
   grid-template-columns: repeat(5, minmax(0, 1fr));

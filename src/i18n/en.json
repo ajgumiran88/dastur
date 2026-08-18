@@ -142,9 +142,9 @@
     "body": "Reach us directly, or order through your preferred delivery platform.",
     "whatsapp": "Order via WhatsApp",
     "whatsappDesc": "Message us and we will guide your order personally.",
-    "direct": "Order Online",
+    "direct": "Direct Order",
     "directDesc": "Browse and check out through our direct ordering page.",
-    "platformsLabel": "Or find us on",
+    "platformsLabel": "Delivery Services",
     "fields": {
       "locations": "Delivery areas",
       "minOrder": "Minimum order",
