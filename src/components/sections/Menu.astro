@@ -18,9 +18,6 @@ const dishData = menuCategories.flatMap((c) =>
     name: dish.name[locale],
     nameAlt: locale === 'en' ? dish.name.ar : dish.name.en,
     desc: dish.desc[locale],
-    price: dish.price,
-    currency: t(locale, 'menu.currency'),
-    priceFrom: t(locale, 'menu.priceFrom'),
     tags: dish.tags.map((tag) => t(locale, `menu.tags.${tag}`)),
     order: orderWaLink(locale, dish.name.en),
     orderLabel: t(locale, 'menu.addToOrder'),
@@ -101,7 +98,6 @@ const dishData = menuCategories.flatMap((c) =>
         <p class="dmodal__desc"></p>
         <ul class="dmodal__tags" role="list"></ul>
         <div class="dmodal__foot">
-          <p class="dmodal__price tnum"></p>
           <a class="dmodal__order" href="#" target="_blank" rel="noopener noreferrer"></a>
         </div>
       </div>
@@ -151,7 +147,6 @@ const dishData = menuCategories.flatMap((c) =>
   if (modal && dataEl && typeof modal.showModal === 'function') {
     type Dish = {
       id: string; name: string; nameAlt: string; desc: string;
-      price: number; currency: string; priceFrom: string;
       tags: string[]; order: string; orderLabel: string;
     };
     let dishes: Dish[] = [];
@@ -168,8 +163,6 @@ const dishData = menuCategories.flatMap((c) =>
         q('.dmodal__name').textContent = d.name;
         q('.dmodal__alt').textContent = d.nameAlt;
         q('.dmodal__desc').textContent = d.desc;
-        q('.dmodal__price').innerHTML =
-          `<span class="dmodal__from">${d.priceFrom}</span> <span class="dmodal__amt">${d.price}</span> <span class="dmodal__cur">${d.currency}</span>`;
         const tags = q('.dmodal__tags');
         tags.innerHTML = '';
         d.tags.forEach((tg) => {
@@ -406,26 +399,11 @@ const dishData = menuCategories.flatMap((c) =>
   .dmodal__foot {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 1rem;
     margin-top: 0.5rem;
     padding-top: 1rem;
     border-top: 1px solid var(--hairline);
-  }
-  .dmodal__from {
-    font-size: 0.66rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-faint);
-  }
-  .dmodal__amt {
-    font-family: var(--font-display);
-    font-size: 1.7rem;
-    font-weight: 600;
-  }
-  .dmodal__cur {
-    font-size: 0.8rem;
-    color: var(--text-muted);
   }
   .dmodal__order {
     display: inline-flex;
