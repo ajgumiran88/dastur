@@ -425,9 +425,18 @@ html.animate-ready .horizontal-scroll [data-animate].is-inview {
     url('/images/story-parchment-background.png') center / cover no-repeat;
 }
 
-#story .story { grid-template-columns: 1.2fr 0.8fr; }
+#story > .section__content {
+  display: flex;
+  align-items: center;
+  min-height: 100%;
+}
+#story .story {
+  width: 100%;
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+  gap: clamp(2.5rem, 5vw, 5.5rem);
+}
 #story .story__text { gap: 0.7rem; }
-#story .story__title { font-size: clamp(2.5rem, 4vw, 4.6rem); }
+#story .story__title { max-width: 15ch; font-size: clamp(2.5rem, 3.6vw, 4.25rem); }
 #story .story__title,
 #story .symbol__title { color: var(--text); }
 #story .story__body { gap: 0.55rem; font-size: 0.78rem; }
@@ -438,7 +447,8 @@ html.animate-ready .horizontal-scroll [data-animate].is-inview {
 #story .symbol__ico { width: 34px; height: 34px; }
 #story .symbol__title { font-size: 0.9rem; }
 #story .symbol__desc { font-size: 0.66rem; line-height: 1.35; }
-#story .story__figure { aspect-ratio: 5 / 4; max-width: 560px; clip-path: none; border-radius: 0; transform: rotate(2deg); }
+#story .story__media { display: flex; align-items: center; justify-content: center; }
+#story .story__figure { width: 100%; aspect-ratio: 5 / 4; max-width: 520px; clip-path: none; border-radius: 0; transform: rotate(1deg); }
 #story .story__arch { display: none; }
 #story .story__caption { border-radius: 0; background: var(--hz-ink); }
 #story .symbol__ico { border-radius: 50%; color: var(--hz-gold); }

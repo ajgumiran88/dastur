@@ -4,7 +4,6 @@ import Motif from '@/components/ui/Motif.astro';
 import DishCard from '@/components/ui/DishCard.astro';
 import { menuCategories } from '@/config/menu';
 import { t, type Locale } from '@/lib/i18n';
-import { orderWaLink } from '@/lib/links';
 
 interface Props {
   locale: Locale;
@@ -19,8 +18,6 @@ const dishData = menuCategories.flatMap((c) =>
     nameAlt: locale === 'en' ? dish.name.ar : dish.name.en,
     desc: dish.desc[locale],
     tags: dish.tags.map((tag) => t(locale, `menu.tags.${tag}`)),
-    order: orderWaLink(locale, dish.name.en),
-    orderLabel: t(locale, 'menu.addToOrder'),
   })),
 );
 ---
@@ -97,9 +94,6 @@ const dishData = menuCategories.flatMap((c) =>
         </div>
         <p class="dmodal__desc"></p>
         <ul class="dmodal__tags" role="list"></ul>
-        <div class="dmodal__foot">
-          <a class="dmodal__order" href="#" target="_blank" rel="noopener noreferrer"></a>
-        </div>
       </div>
     </div>
   </dialog>
@@ -147,7 +141,7 @@ const dishData = menuCategories.flatMap((c) =>
   if (modal && dataEl && typeof modal.showModal === 'function') {
     type Dish = {
       id: string; name: string; nameAlt: string; desc: string;
-      tags: string[]; order: string; orderLabel: string;
+      tags: string[];
     };
     let dishes: Dish[] = [];
     try {
@@ -171,9 +165,6 @@ const dishData = menuCategories.flatMap((c) =>
           li.textContent = tg;
           tags.appendChild(li);
         });
-        const order = q('.dmodal__order') as HTMLAnchorElement;
-        order.href = d.order;
-        order.textContent = d.orderLabel;
         modal.showModal();
       });
     });

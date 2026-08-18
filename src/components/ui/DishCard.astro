@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import { t, type Locale } from '@/lib/i18n';
-import { orderWaLink } from '@/lib/links';
 import type { Dish, DishTag } from '@/config/menu';
 import Motif from './Motif.astro';
 
@@ -32,7 +31,6 @@ const tagGlyph: Record<DishTag, string> = {
 
 const name = dish.name[locale];
 const nameAlt = locale === 'en' ? dish.name.ar : dish.name.en;
-const waHref = orderWaLink(locale, dish.name.en);
 const monogram = dish.name.en.charAt(0);
 ---
 
@@ -100,18 +98,6 @@ const monogram = dish.name.en.charAt(0);
         >
           {t(locale, 'menu.viewDetails')}
         </button>
-        <a
-          class="dish__order"
-          href={waHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`${t(locale, 'menu.addToOrder')} — ${name}`}
-        >
-          {t(locale, 'menu.addToOrder')}
-          <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 10h10M11 6l4 4-4 4" />
-          </svg>
-        </a>
       </div>
     </div>
   </div>
