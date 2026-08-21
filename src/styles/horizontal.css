@@ -1,4 +1,4 @@
-/* DASTUR horizontal edition — full-viewport editorial journey. */
+/* DASTUR vertical edition — a single, scrollable editorial page. */
 :root {
   --hz-ink: #111714;
   --hz-forest: #17351f;
@@ -13,8 +13,9 @@
 html,
 body {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
+  overflow-x: clip;
+  overflow-y: auto;
 }
 
 body {
@@ -22,135 +23,52 @@ body {
 }
 
 #main {
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100dvh;
+  overflow: visible;
 }
 
-.horizontal-scroll {
-  display: flex;
-  width: 100vw;
-  height: 100dvh;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  overscroll-behavior-inline: contain;
-  scrollbar-width: none;
+.vertical-scroll {
+  width: 100%;
 }
 
-.horizontal-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.horizontal-scroll > section,
-.horizontal-scroll > footer {
-  flex: 0 0 100vw;
-  width: 100vw;
-  height: 100dvh;
-  min-height: 0 !important;
+.vertical-scroll > section,
+.vertical-scroll > footer {
+  width: 100%;
+  min-height: 100dvh;
   padding-block: clamp(6.5rem, 12vh, 8rem) clamp(5rem, 9vh, 6.5rem) !important;
-  overflow-x: hidden;
-  overflow-y: auto;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  scrollbar-width: thin;
 }
 
-.horizontal-scroll > section::before,
-.horizontal-scroll > footer::before {
+.vertical-scroll > section::before,
+.vertical-scroll > footer::before {
   display: none;
 }
 
-.horizontal-scroll .container {
+.vertical-scroll .container {
   max-width: 1380px;
 }
 
-.horizontal-scroll h1,
-.horizontal-scroll h2,
-.horizontal-scroll h3 {
+.vertical-scroll h1,
+.vertical-scroll h2,
+.vertical-scroll h3 {
   letter-spacing: -0.035em;
 }
 
-.horizontal-scroll h2 {
+.vertical-scroll h2 {
   font-size: clamp(2.5rem, 5vw, 5.75rem);
   line-height: 0.9;
 }
 
-.horizontal-scroll .eyebrow {
+.vertical-scroll .eyebrow {
   font-size: 0.67rem;
   letter-spacing: 0.32em;
 }
 
-.horizontal-scroll [data-animate] {
+.vertical-scroll [data-animate] {
   transform: translateX(44px);
 }
 
-html.animate-ready .horizontal-scroll [data-animate].is-inview {
+html.animate-ready .vertical-scroll [data-animate].is-inview {
   transform: translateX(0);
-}
-
-/* Persistent journey controls */
-.journey {
-  position: fixed;
-  z-index: 120;
-  inset-inline-end: clamp(1.2rem, 3vw, 3rem);
-  inset-block-end: 1.35rem;
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  min-height: 48px;
-  padding: 0.35rem 0.4rem;
-  border: 1px solid rgb(255 255 255 / 0.22);
-  border-radius: 999px;
-  color: white;
-  background: rgb(12 18 15 / 0.76);
-  backdrop-filter: blur(16px);
-  box-shadow: 0 12px 40px rgb(0 0 0 / 0.22);
-}
-
-.journey__button {
-  display: grid;
-  width: 38px;
-  height: 38px;
-  place-items: center;
-  border-radius: 50%;
-  color: white;
-  background: rgb(255 255 255 / 0.1);
-  transition: background-color 180ms ease, transform 180ms ease, opacity 180ms ease;
-}
-
-.journey__button:hover:not(:disabled) {
-  background: var(--hz-coral);
-  transform: scale(1.06);
-}
-
-.journey__button:disabled {
-  opacity: 0.3;
-}
-
-.journey__count {
-  display: flex;
-  gap: 0.3rem;
-  font-size: 0.68rem;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
-}
-
-.journey__line {
-  width: clamp(54px, 7vw, 110px);
-  height: 2px;
-  overflow: hidden;
-  background: rgb(255 255 255 / 0.2);
-}
-
-.journey__line span {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--hz-gold);
-  transform: scaleX(0.111);
-  transform-origin: left;
-  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Navigation becomes a compact editorial rail rather than the old transparent bar. */
@@ -567,18 +485,9 @@ html.animate-ready .horizontal-scroll [data-animate].is-inview {
 }
 
 @media (max-width: 899px) {
-  .horizontal-scroll > section,
-  .horizontal-scroll > footer {
+  .vertical-scroll > section,
+  .vertical-scroll > footer {
     padding-block: 6rem 5.5rem !important;
-  }
-
-  .journey {
-    inset-inline: 50% auto;
-    transform: translateX(-50%);
-  }
-
-  [dir='rtl'] .journey {
-    transform: translateX(50%);
   }
 
   #home {
@@ -627,7 +536,7 @@ html.animate-ready .horizontal-scroll [data-animate].is-inview {
   #experience .exp__step { min-height: 240px; }
   #gallery .gal__head { float: none; width: auto; margin-inline-end: 0; }
   #gallery .gal__grid { grid-template-columns: repeat(2, 1fr); }
-  #contact { height: 100dvh; }
+  #contact { min-height: auto; }
 }
 
 @media (max-width: 620px) {
@@ -638,7 +547,5 @@ html.animate-ready .horizontal-scroll [data-animate].is-inview {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .horizontal-scroll { scroll-behavior: auto; }
-  .journey__line span,
-  .journey__button { transition: none; }
+  .vertical-scroll { scroll-behavior: auto; }
 }
