@@ -89,12 +89,12 @@ export const site: SiteConfig = {
   },
   seo: {
     title: {
-      en: 'DASTUR — Contemporary Emirati Cuisine · Cloud Kitchen',
-      ar: 'دستور — مطبخ إماراتي معاصر · مطبخ سحابي',
+      en: 'DASTUR: Contemporary Emirati Cuisine · Cloud Kitchen',
+      ar: 'دستور: مطبخ إماراتي معاصر · مطبخ سحابي',
     },
     description: {
-      en: 'Authentic Emirati flavors reimagined for today — freshly prepared and delivered in premium heritage packaging. A contemporary Emirati cloud kitchen.',
-      ar: 'نكهات إماراتية أصيلة بروح عصرية — تُحضَّر طازجة وتصل بتغليف تراثي فاخر. مطبخ إماراتي معاصر.',
+      en: 'Authentic Emirati flavors reimagined for today, freshly prepared and delivered in premium heritage packaging. A contemporary Emirati cloud kitchen.',
+      ar: 'نكهات إماراتية أصيلة بروح عصرية، تُحضَّر طازجة وتصل بتغليف تراثي فاخر. مطبخ إماراتي معاصر.',
     },
     ogImage: '/og-image.jpg',
     themeColor: '#1c2630',

@@ -12,13 +12,22 @@ interface Props {
 }
 const { locale } = Astro.props;
 const points = tList<string>(locale, 'packaging.points');
+const packagingTitle = t(locale, 'packaging.title');
 ---
 
 <Section id="packaging" theme="oud" labelledby="pkg-title">
   <div class="container pkg">
     <div class="pkg__text" data-animate>
       <p class="eyebrow"><Motif name="diamond" />{t(locale, 'packaging.eyebrow')}</p>
-      <h2 id="pkg-title" class="pkg__title">{t(locale, 'packaging.title')}</h2>
+      <h2 id="pkg-title" class="pkg__title">
+        {
+          locale === 'en' ? (
+            <><span>Crafted Beyond</span><span>the Kitchen</span></>
+          ) : (
+            packagingTitle
+          )
+        }
+      </h2>
       <p class="lead pkg__body measure">{t(locale, 'packaging.body')}</p>
       <ul class="pkg__points" role="list">
         {
@@ -32,8 +41,8 @@ const points = tList<string>(locale, 'packaging.points');
       </ul>
     </div>
 
-    <div class="pkg__media" data-animate data-animate-delay="120">
-      <figure class="pkg__main" data-tilt>
+    <div class="pkg__media" data-animate data-animate-delay="120" aria-label="DASTUR packaging gallery">
+      <figure class="pkg__slide pkg__slide--1">
         <Image
           src={ropeBoxes}
           alt="Three cream DASTUR rope-handle boxes with green rims and the engraved heritage skyline."
@@ -42,7 +51,7 @@ const points = tList<string>(locale, 'packaging.points');
           loading="lazy"
         />
       </figure>
-      <figure class="pkg__accent pkg__accent--1">
+      <figure class="pkg__slide pkg__slide--2">
         <Image
           src={greenBento}
           alt="Palm-green DASTUR bento carry-box with dates, luqaimat and machboos."
@@ -51,7 +60,7 @@ const points = tList<string>(locale, 'packaging.points');
           loading="lazy"
         />
       </figure>
-      <figure class="pkg__accent pkg__accent--2">
+      <figure class="pkg__slide pkg__slide--3">
         <Image
           src={kraftBag}
           alt="Kraft DASTUR delivery bag with a palm-green band and heritage skyline."
@@ -78,10 +87,16 @@ const points = tList<string>(locale, 'packaging.points');
   .pkg__title {
     font-size: var(--fs-h2);
     color: var(--sand);
-    max-width: 14ch;
+    max-width: 15ch;
+  }
+  .pkg__title span {
+    display: block;
+    white-space: nowrap;
   }
   .pkg__body {
     color: var(--on-dark-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
   .pkg__points {
     display: flex;
@@ -96,7 +111,8 @@ const points = tList<string>(locale, 'packaging.points');
     align-items: center;
     gap: 0.8rem;
     color: var(--sand);
-    font-size: var(--fs-small);
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
   .pkg__points :global(.motif) {
     width: 1rem;
@@ -107,45 +123,31 @@ const points = tList<string>(locale, 'packaging.points');
 
   .pkg__media {
     position: relative;
-    min-height: 340px;
-    perspective: 1200px;
+    min-height: clamp(320px, 38vw, 500px);
   }
-  .pkg__main {
+  .pkg__slide {
+    position: absolute;
+    inset: 0;
     margin: 0;
     border-radius: var(--r-lg);
     overflow: hidden;
     box-shadow: var(--shadow-dark);
-    transform-style: preserve-3d;
-    transition: transform var(--dur-3) var(--ease-out);
-    will-change: transform;
+    opacity: 0;
+    animation: pkg-slide 12s infinite;
   }
-  .pkg__main :global(img) {
+  .pkg__slide--1 { animation-delay: 0s; }
+  .pkg__slide--2 { animation-delay: 4s; }
+  .pkg__slide--3 { animation-delay: 8s; }
+  .pkg__slide :global(img) {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
   }
-  .pkg__accent {
-    position: absolute;
-    margin: 0;
-    border-radius: var(--r-md);
-    overflow: hidden;
-    box-shadow: var(--shadow-dark);
-    border: 3px solid var(--oud-800);
-  }
-  .pkg__accent :global(img) {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  .pkg__accent--1 {
-    width: clamp(120px, 22vw, 190px);
-    inset-block-end: -6%;
-    inset-inline-start: -6%;
-  }
-  .pkg__accent--2 {
-    width: clamp(100px, 18vw, 160px);
-    inset-block-start: -8%;
-    inset-inline-end: -4%;
+  @keyframes pkg-slide {
+    0%, 27% { opacity: 1; }
+    33%, 94% { opacity: 0; }
+    100% { opacity: 1; }
   }
 
   @media (min-width: 900px) {
@@ -154,8 +156,7 @@ const points = tList<string>(locale, 'packaging.points');
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .pkg__main {
-      transition: none;
-    }
+    .pkg__slide { animation: none; opacity: 0; }
+    .pkg__slide--1 { opacity: 1; }
   }
 </style>

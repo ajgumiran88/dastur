@@ -156,7 +156,7 @@ export const menuCategories: MenuCategory[] = [
     accent: 'palm',
     motif: 'arch',
     dishes: [
-      d('family-feast', 'Family Feast Box', 'صندوق وليمة العائلة', 'A shareable spread for four — rice, grills, sides, sweets.', 'مائدة لأربعة — أرز ومشاوي وجوانب وحلويات.', 249, ['chef-signature']),
+      d('family-feast', 'Family Feast Box', 'صندوق وليمة العائلة', 'A shareable spread for four: rice, grills, sides, sweets.', 'مائدة لأربعة: أرز ومشاوي وجوانب وحلويات.', 249, ['chef-signature']),
       d('majlis-box', 'Majlis Sharing Box', 'صندوق المجلس', 'Coffee, dates, luqaimat and savory bites for guests.', 'قهوة وتمر ولقيمات ولقمات مالحة للضيوف.', 149, ['vegetarian', 'contains-nuts']),
       d('breakfast-box', 'Emirati Breakfast Box', 'صندوق الفطور الإماراتي', 'Balaleet, regag, cheese, honey and karak for two.', 'بلاليط ورقاق وجبن وعسل وكرك لاثنين.', 96, ['vegetarian', 'dairy']),
     ],

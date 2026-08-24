@@ -29,23 +29,17 @@ const facts = [
       <p class="lead del__body measure">{t(locale, 'delivery.body')}</p>
     </div>
 
-    <div class="del__direct" data-animate data-animate-delay="100">
-      <p class="del__sectionLabel caps"><span></span>{t(locale, 'delivery.direct')}<span></span></p>
-      <a class="path path--primary" href={orderWaLink(locale)} target="_blank" rel="noopener noreferrer">
-        <span class="path__ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.6-1.2A9 9 0 1 0 12 3Z" /><path d="M8.5 9.5c.4 3 2.9 5.6 6 6l1.2-1.6 2 .8-.4 2c-4.4.9-9.3-4-8.4-8.4l2-.4.8 2Z" /></svg>
-        </span>
-        <span class="path__text">
-          <span class="path__title">{t(locale, 'delivery.whatsapp')}</span>
-        </span>
-      </a>
-    </div>
-
     {
       platforms.length > 0 && (
-        <div class="del__platforms" data-animate data-animate-delay="160">
+        <div class="del__platforms" data-animate data-animate-delay="100">
           <p class="del__sectionLabel del__platformsLabel caps"><span></span>{t(locale, 'delivery.platformsLabel')}<span></span></p>
           <div class="del__platformGrid">
+            <a class="path path--primary" href={orderWaLink(locale)} target="_blank" rel="noopener noreferrer">
+              <span class="path__ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.6-1.2A9 9 0 1 0 12 3Z" /><path d="M8.5 9.5c.4 3 2.9 5.6 6 6l1.2-1.6 2 .8-.4 2c-4.4.9-9.3-4-8.4-8.4l2-.4.8 2Z" /></svg>
+              </span>
+              <span class="path__text"><span class="path__title">{t(locale, 'delivery.whatsapp')}</span></span>
+            </a>
             {platforms.map((p) => (
               <PlatformButton platform={p} />
             ))}
@@ -107,10 +101,6 @@ const facts = [
     color: var(--on-dark-muted);
   }
 
-  .del__direct {
-    width: min(100%, 620px);
-    margin: 2rem auto 0;
-  }
   .del__sectionLabel {
     display: flex;
     align-items: center;
@@ -144,7 +134,7 @@ const facts = [
   }
   .path--primary {
     justify-content: center;
-    min-height: 104px;
+    min-height: 94px;
     background: rgb(7 31 28 / 0.62);
     border-color: color-mix(in srgb, var(--brass-300) 38%, transparent);
   }
@@ -206,6 +196,23 @@ const facts = [
     gap: 0.8rem;
     max-width: 760px;
     margin-inline: auto;
+  }
+  .del__platformGrid .path {
+    min-width: 0;
+    padding-inline: 1rem;
+  }
+  .del__platformGrid .path__ico {
+    width: 42px;
+    height: 42px;
+  }
+  .del__platformGrid .path__ico svg {
+    width: 28px;
+    height: 28px;
+  }
+  .del__platformGrid .path__title {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
   }
   .del__platformGrid :global(.platform) {
     min-height: 74px;
@@ -278,6 +285,9 @@ const facts = [
   }
 
   @media (min-width: 720px) {
+    .del__platformGrid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
     .del__factGrid {
       grid-template-columns: repeat(5, 1fr);
     }

@@ -13,18 +13,18 @@ const label = t(locale, 'a11y.langSwitch');
 <div class:list={['lang', className]} role="group" aria-label={label}>
   <a
     class="lang__opt"
+    href={localizedPath('ar')}
+    hreflang="ar"
+    lang="ar"
+    aria-current={locale === 'ar' ? 'true' : undefined}>AR</a
+  >
+  <span class="lang__sep" aria-hidden="true">|</span>
+  <a
+    class="lang__opt"
     href={localizedPath('en')}
     hreflang="en"
     lang="en"
     aria-current={locale === 'en' ? 'true' : undefined}>EN</a
-  >
-  <span class="lang__sep" aria-hidden="true">/</span>
-  <a
-    class="lang__opt"
-    href={localizedPath('ar')}
-    hreflang="ar"
-    lang="ar"
-    aria-current={locale === 'ar' ? 'true' : undefined}>ع</a
   >
   <span class="sr-only">Current language: {locale === 'ar' ? 'Arabic' : 'English'}. Switch to {other === 'ar' ? 'Arabic' : 'English'}.</span>
 </div>
@@ -49,10 +49,6 @@ const label = t(locale, 'a11y.langSwitch');
   .lang__opt[aria-current='true'] {
     opacity: 1;
     font-weight: 600;
-  }
-  .lang__opt[lang='ar'] {
-    font-size: 1.15em;
-    line-height: 1;
   }
   .lang__sep {
     opacity: 0.35;

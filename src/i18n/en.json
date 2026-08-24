@@ -17,13 +17,13 @@
     "closeModal": "Close",
     "prev": "Previous",
     "next": "Next",
-    "emblem": "DASTUR emblem — an arch framing a palm, dhow and wind tower",
+    "emblem": "DASTUR emblem: an arch framing a palm, dhow and wind tower",
     "toTop": "Back to top"
   },
   "hero": {
     "eyebrow": "Contemporary Emirati Cuisine",
     "title": "Ancient Emirati Recipes, Modern Plates",
-    "body": "Discover authentic Emirati flavors presented through a refined contemporary experience — prepared with care and delivered beautifully to your door.",
+    "body": "Discover authentic Emirati flavors presented through a refined contemporary experience, prepared with care and delivered beautifully to your door.",
     "ctaOrder": "Order Now",
     "ctaMenu": "Explore the Menu",
     "scroll": "Scroll to explore"
@@ -31,9 +31,9 @@
   "story": {
     "eyebrow": "Our Story",
     "title": "A Story Shaped by Land and Sea",
-    "p1": "DASTUR is rooted in Emirati heritage and reimagined through a refined contemporary aesthetic. Our emblem gathers the symbols that shaped this coast — the palm, the dhow, and the wind tower — into a single arch.",
+    "p1": "DASTUR is rooted in Emirati heritage and reimagined through a refined contemporary aesthetic. Our emblem gathers the symbols that shaped this coast: the palm, the dhow, and the wind tower, into a single arch.",
     "p2": "They speak of authenticity, craftsmanship, and the connection between land and sea: the desert that grows the date palm, the gulf that carried the trading dhow, and the towers that cooled the homes of a resourceful people.",
-    "p3": "We carry that spirit into every order — traditional recipes plated with modern restraint and delivered with the hospitality of a home that keeps its word.",
+    "p3": "We carry that spirit into every order: traditional recipes plated with modern restraint and delivered with the hospitality of a home that keeps its word.",
     "symbols": {
       "land": "Of the Land",
       "landDesc": "Dates, grains and spices drawn from the desert table.",
@@ -46,8 +46,8 @@
   "menu": {
     "eyebrow": "Signature Menu",
     "title": "A Table Set with Intention",
-    "intro": "A selection across our kitchen — from slow-cooked rice dishes to sweet endings and Emirati coffee.",
-    "demoNote": "Sample menu for demonstration. Dishes, descriptions and prices are placeholders — replace with your approved menu before launch.",
+    "intro": "A selection across our kitchen, from slow-cooked rice dishes to sweet endings and Emirati coffee.",
+    "demoNote": "Sample menu for demonstration. Dishes, descriptions and prices are placeholders; replace with your approved menu before launch.",
     "addToOrder": "Add to order",
     "viewDetails": "View details",
     "priceFrom": "from",
@@ -75,7 +75,7 @@
   "experience": {
     "eyebrow": "The DASTUR Experience",
     "title": "From Our Kitchen to Your Door",
-    "intro": "A considered journey — the same care from the first tap to the last bite.",
+    "intro": "A considered journey, the same care from the first tap to the last bite.",
     "steps": [
       {
         "title": "Select your favorites",
@@ -98,7 +98,7 @@
   "packaging": {
     "eyebrow": "Packaging",
     "title": "Crafted Beyond the Kitchen",
-    "body": "Every DASTUR order is presented with the same attention to heritage, detail, and hospitality as the food inside — from the engraved skyline to the rope-bound handle.",
+    "body": "Every DASTUR order is presented with the same attention to heritage, detail, and hospitality as the food inside, from the engraved skyline to the rope-bound handle.",
     "points": [
       "Heritage skyline, engraved on every box",
       "Secure, delivery-ready construction",
@@ -108,7 +108,7 @@
   "why": {
     "eyebrow": "Why DASTUR",
     "title": "Considered in Every Detail",
-    "intro": "Not more, but better — a short list we hold ourselves to.",
+    "intro": "Not more, but better: a short list we hold ourselves to.",
     "items": [
       {
         "title": "Authentic Emirati inspiration",
@@ -124,7 +124,7 @@
       },
       {
         "title": "Freshly prepared to order",
-        "desc": "Cooked when you order — never sitting, never rushed."
+        "desc": "Cooked when you order, never sitting, never rushed."
       },
       {
         "title": "Premium delivery packaging",
@@ -152,13 +152,13 @@
       "eta": "Expected delivery",
       "contact": "Contact"
     },
-    "demoNote": "Contact details, hours, areas and platform links below are placeholders — confirm your live business details before launch."
+    "demoNote": "Contact details, hours, areas and platform links below are placeholders; confirm your live business details before launch."
   },
   "gallery": {
     "eyebrow": "Gallery",
     "title": "A Feast for the Eyes",
     "intro": "Signature plates, premium packaging and the details in between.",
-    "demoImage": "Demo image — replace with your own photography"
+    "demoImage": "Demo image: replace with your own photography"
   },
   "footer": {
     "statement": "Contemporary Emirati cuisine, prepared with care and delivered beautifully. A cloud kitchen rooted in heritage.",
