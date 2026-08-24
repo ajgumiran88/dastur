@@ -288,27 +288,34 @@ html.animate-ready .vertical-scroll [data-animate].is-inview {
 }
 #delivery .path--primary:hover { background: rgb(10 43 37 / 0.78); border-color: var(--brass-300); }
 #delivery .path--primary .path__ico {
-  width: 42px;
-  height: 42px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   color: white;
   background: #25d366;
   box-shadow: 0 0 0 3px rgb(255 255 255 / 0.92);
 }
-#delivery .path--primary .path__ico svg { width: 28px; height: 28px; stroke-width: 1.9; }
+#delivery .path--primary .path__ico svg { width: 16px; height: 16px; stroke-width: 1.9; }
 #delivery .path--primary .path__text { flex: 0 1 auto; }
 #delivery .path__title { font-family: var(--font-body); font-size: 1rem; font-weight: 600; }
 #delivery .del__platforms { width: min(100%, 760px); margin: 1.8rem auto 0; text-align: center; }
 #delivery .del__platformGrid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 #delivery .del__platformGrid .platform {
   min-height: 94px;
-  padding-inline: 1.75rem;
+  padding-inline: 0.75rem;
+  overflow: hidden;
   border-color: color-mix(in srgb, var(--brass-300) 25%, transparent);
   background: rgb(7 31 28 / 0.48);
 }
+#delivery .del__platformGrid .platform__logo {
+  width: 100%;
+  max-width: 132px;
+  height: 44px;
+  object-fit: contain;
+}
 #delivery .platform__logo[src*='careem'] { filter: brightness(2.1) saturate(1.2); }
 #delivery .platform__logo[src*='noon-food'] { filter: brightness(1.8) contrast(1.08); }
-#delivery .platform__logo[src*='talabat'] { transform: scale(3.4); }
+#delivery .platform__logo[src*='talabat'] { max-width: 148px; transform: scale(1.08); }
 #delivery .del__facts { display: block; width: min(100%, 1080px); margin: 2rem auto 0; }
 #delivery .del__factGrid {
   grid-template-columns: repeat(5, minmax(0, 1fr));
