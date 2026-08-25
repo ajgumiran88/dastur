@@ -459,6 +459,10 @@ html.animate-ready .vertical-scroll [data-animate].is-inview {
 /* 09 — Contact finale */
 #contact {
   background: linear-gradient(180deg, var(--hz-ink) 0%, #0b100d 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-block: clamp(7rem, 12vh, 10rem) clamp(6rem, 12vh, 10rem) !important;
 }
 
 #contact .footer__grid { gap: 1.35rem clamp(1.5rem, 4vw, 4rem); }
@@ -501,6 +505,10 @@ html.animate-ready .vertical-scroll [data-animate].is-inview {
 @media (max-width: 899px) {
   .vertical-scroll > section,
   .vertical-scroll > footer {
+    padding-block: 6rem 5.5rem !important;
+  }
+
+  #contact {
     padding-block: 6rem 5.5rem !important;
   }
 
