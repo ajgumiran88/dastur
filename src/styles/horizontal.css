@@ -28,14 +28,19 @@ body {
 }
 
 .vertical-scroll {
+  --section-transition: clamp(5rem, 8vh, 7rem);
   width: 100%;
 }
 
 .vertical-scroll > section,
 .vertical-scroll > footer {
   width: 100%;
+  padding-block: clamp(5.5rem, 9vh, 7rem) clamp(4.5rem, 7vh, 5.75rem) !important;
+}
+
+#home,
+#contact {
   min-height: 100dvh;
-  padding-block: clamp(6.5rem, 12vh, 8rem) clamp(5rem, 9vh, 6.5rem) !important;
 }
 
 .vertical-scroll > section::before,
@@ -251,7 +256,18 @@ html.animate-ready .vertical-scroll [data-animate].is-inview {
 #delivery {
   --bg: #1c2630;
   --surface: #2a3845;
-  background: linear-gradient(180deg, #1c2630 0%, #1c2630 76%, #e9dccb 100%);
+  background-color: #1c2630;
+  background-image: linear-gradient(
+    in oklab,
+    #1c2630 0%,
+    #30393b 24%,
+    #69685f 54%,
+    #b7a78e 82%,
+    #f2e0c6 100%
+  );
+  background-position: bottom;
+  background-size: 100% var(--section-transition);
+  background-repeat: no-repeat;
 }
 
 #delivery .del {
@@ -407,10 +423,20 @@ html.animate-ready .vertical-scroll [data-animate].is-inview {
 /* 06 — Packaging showroom */
 #packaging {
   --bg: var(--hz-ink);
-  background:
-    linear-gradient(to bottom, transparent 70%, rgb(255 250 240 / 0.86) 100%),
-    radial-gradient(circle at 80% 30%, rgb(212 168 79 / 0.16), transparent 30%),
-    var(--hz-ink);
+  background-color: var(--hz-ink);
+  background-image:
+    linear-gradient(
+      in oklab,
+      #111714 0%,
+      #2d342f 24%,
+      #68695e 54%,
+      #b7a78e 82%,
+      #f2e0c6 100%
+    ),
+    radial-gradient(circle at 80% 30%, rgb(212 168 79 / 0.16), transparent 30%);
+  background-position: bottom, center;
+  background-size: 100% var(--section-transition), 100% 100%;
+  background-repeat: no-repeat;
 }
 
 #packaging .pkg { grid-template-columns: 0.72fr 1.28fr; }
