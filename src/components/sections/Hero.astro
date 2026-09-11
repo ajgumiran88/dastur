@@ -82,11 +82,7 @@ const { locale } = Astro.props;
   .hero__wash {
     position: absolute;
     inset: 0;
-    background: radial-gradient(
-      90% 70% at 78% 12%,
-      color-mix(in srgb, var(--palm) 30%, transparent) 0%,
-      transparent 55%
-    );
+    background: transparent;
     opacity: 0.55;
   }
   .hero__skyline {
@@ -98,8 +94,6 @@ const { locale } = Astro.props;
     opacity: 0.12;
     filter: brightness(0) invert(1) sepia(0.5) saturate(1.4) hue-rotate(345deg)
       brightness(1.05);
-    -webkit-mask-image: linear-gradient(to top, black 40%, transparent 96%);
-    mask-image: linear-gradient(to top, black 40%, transparent 96%);
   }
   .hero__skyline :global(img) {
     width: 100%;
@@ -195,7 +189,7 @@ const { locale } = Astro.props;
   .hero__scroll-line {
     width: 1px;
     height: 44px;
-    background: linear-gradient(to bottom, var(--brass-300), transparent);
+    background: var(--brass-300);
     position: relative;
     overflow: hidden;
   }

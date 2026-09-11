@@ -30,7 +30,6 @@ const tagGlyph: Record<DishTag, string> = {
 };
 
 const name = dish.name[locale];
-const nameAlt = locale === 'en' ? dish.name.ar : dish.name.en;
 const monogram = dish.name.en.charAt(0);
 ---
 
@@ -69,9 +68,7 @@ const monogram = dish.name.en.charAt(0);
   <div class="dish__body">
     <div class="dish__head">
       <h3 class="dish__name">{name}</h3>
-      <p class="dish__alt" lang={locale === 'en' ? 'ar' : 'en'} dir={locale === 'en' ? 'rtl' : 'ltr'}>
-        {nameAlt}
-      </p>
+      {locale === 'ar' && <p class="dish__alt" lang="en" dir="ltr">{dish.name.en}</p>}
     </div>
     <p class="dish__desc">{dish.desc[locale]}</p>
 
@@ -89,6 +86,7 @@ const monogram = dish.name.en.charAt(0);
     }
 
     <div class="dish__foot">
+      <p class="dish__price"><span class="dish__currency">{dish.currency}</span> <strong class="dish__amount">{dish.price}</strong></p>
       <div class="dish__actions">
         <button
           class="dish__details"
@@ -143,8 +141,7 @@ const monogram = dish.name.en.charAt(0);
     inset: 0;
     display: grid;
     place-items: center;
-    background:
-      radial-gradient(120% 100% at 50% 0%, color-mix(in srgb, var(--card-accent) 22%, var(--sand-100)) 0%, var(--sand-100) 70%);
+    background: var(--sand-100);
     color: var(--card-accent);
     overflow: hidden;
   }
@@ -297,7 +294,7 @@ const monogram = dish.name.en.charAt(0);
   .dish__foot {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 0.75rem;
     margin-top: auto;
     padding-top: 0.5rem;
@@ -307,6 +304,9 @@ const monogram = dish.name.en.charAt(0);
     align-items: center;
     gap: 0.9rem;
   }
+  .dish__price { color: var(--text); white-space: nowrap; }
+  .dish__currency { font-size: 0.75rem; letter-spacing: 0.06em; }
+  .dish__amount { font-size: 1.2rem; font-variant-numeric: tabular-nums; }
   .dish__details {
     font-size: var(--fs-small);
     color: var(--text-muted);

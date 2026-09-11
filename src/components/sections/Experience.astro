@@ -24,10 +24,14 @@ const motifs = ['diamond', 'windtower', 'arch', 'dhow'] as const;
       {
         steps.map((step, i) => (
           <li class="exp__step" data-animate data-animate-delay={i * 90}>
-            <span class="exp__num caps">{String(i + 1).padStart(2, '0')}</span>
-            <span class="exp__ico"><Motif name={motifs[i] ?? 'diamond'} /></span>
-            <h3 class="exp__stepTitle">{step.title}</h3>
-            <p class="exp__stepDesc">{step.desc}</p>
+            <div class="exp__copy">
+              <h3 class="exp__stepTitle">{step.title}</h3>
+              <p class="exp__stepDesc">{step.desc}</p>
+            </div>
+            <div class="exp__marker" aria-hidden="true">
+              <span class="exp__num">{String(i + 1).padStart(2, '0')}</span>
+              <span class="exp__ico"><Motif name={motifs[i] ?? 'diamond'} /></span>
+            </div>
           </li>
         ))
       }

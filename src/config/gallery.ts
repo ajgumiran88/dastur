@@ -109,4 +109,14 @@ export const galleryItems: GalleryItem[] = [
     span: 'std',
     demo: true,
   },
+  {
+    id: 'g-coffee',
+    kind: 'demo',
+    accent: 'oud',
+    motif: 'dhow',
+    label: { en: 'Gahwa & hospitality', ar: 'قهوة وضيافة' },
+    alt: { en: 'Demo tile celebrating Emirati coffee and hospitality.', ar: 'بطاقة تجريبية للقهوة والضيافة الإماراتية.' },
+    span: 'std',
+    demo: true,
+  },
 ];

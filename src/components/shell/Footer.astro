@@ -1,6 +1,5 @@
 ---
 import Emblem from '@/components/ui/Emblem.astro';
-import Motif from '@/components/ui/Motif.astro';
 import { nav } from '@/config/nav';
 import { site } from '@/config/site';
 import { t, type Locale } from '@/lib/i18n';
@@ -108,13 +107,6 @@ const socials = site.socials.filter((s) => s.enabled);
 
   <div class="container">
     <p class="footer__allergen">{t(locale, 'footer.allergenNote')}</p>
-  </div>
-
-  <div class="footer__tagline">
-    <span class="rule-diamond footer__rule">
-      <Motif name="diamond" />
-    </span>
-    <p class="footer__taglineText">{t(locale, 'footer.tagline')}</p>
   </div>
 
   <div class="container footer__bottom">

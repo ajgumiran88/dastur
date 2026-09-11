@@ -15,7 +15,8 @@ const dishData = menuCategories.flatMap((c) =>
   c.dishes.map((dish) => ({
     id: dish.id,
     name: dish.name[locale],
-    nameAlt: locale === 'en' ? dish.name.ar : dish.name.en,
+    nameAlt: locale === 'ar' ? dish.name.en : '',
+    price: `${dish.currency} ${dish.price}`,
     desc: dish.desc[locale],
     tags: dish.tags.map((tag) => t(locale, `menu.tags.${tag}`)),
   })),
@@ -90,10 +91,11 @@ const dishData = menuCategories.flatMap((c) =>
       <div class="dmodal__body">
         <div class="dmodal__head">
           <h3 id="dmodal-name" class="dmodal__name"></h3>
-          <p class="dmodal__alt"></p>
+          {locale === 'ar' && <p class="dmodal__alt" lang="en" dir="ltr"></p>}
         </div>
         <p class="dmodal__desc"></p>
         <ul class="dmodal__tags" role="list"></ul>
+        <p class="dmodal__price"></p>
       </div>
     </div>
   </dialog>
@@ -141,7 +143,7 @@ const dishData = menuCategories.flatMap((c) =>
   if (modal && dataEl && typeof modal.showModal === 'function') {
     type Dish = {
       id: string; name: string; nameAlt: string; desc: string;
-      tags: string[];
+      tags: string[]; price: string;
     };
     let dishes: Dish[] = [];
     try {
@@ -155,7 +157,9 @@ const dishData = menuCategories.flatMap((c) =>
         const d = map.get(btn.dataset.dish!);
         if (!d) return;
         q('.dmodal__name').textContent = d.name;
-        q('.dmodal__alt').textContent = d.nameAlt;
+        const alt = q('.dmodal__alt');
+        if (alt) alt.textContent = d.nameAlt;
+        q('.dmodal__price').textContent = d.price;
         q('.dmodal__desc').textContent = d.desc;
         const tags = q('.dmodal__tags');
         tags.innerHTML = '';
@@ -337,11 +341,7 @@ const dishData = menuCategories.flatMap((c) =>
     display: grid;
     place-items: center;
     padding: 2.2rem 0 1rem;
-    background: radial-gradient(
-      100% 100% at 50% 0%,
-      color-mix(in srgb, var(--palm) 16%, var(--surface)) 0%,
-      var(--surface-raised) 70%
-    );
+    background: var(--surface-raised);
     color: var(--palm);
   }
   .dmodal__art :global(.motif) {
@@ -370,6 +370,12 @@ const dishData = menuCategories.flatMap((c) =>
   .dmodal__desc {
     color: var(--text-muted);
     line-height: 1.7;
+  }
+  .dmodal__price {
+    padding-top: 1rem;
+    border-top: 1px solid var(--hairline);
+    font-size: 1.25rem;
+    font-weight: 600;
   }
   .dmodal__tags {
     display: flex;
@@ -420,7 +426,7 @@ const dishData = menuCategories.flatMap((c) =>
   }
   @media (min-width: 1000px) {
     .menu__grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>
