@@ -47,7 +47,7 @@ const packagingTitle = t(locale, 'packaging.title');
           src={ropeBoxes}
           alt="Three cream DASTUR rope-handle boxes with green rims and the engraved heritage skyline."
           widths={[520, 820, 1100]}
-          sizes="(max-width: 900px) 90vw, 520px"
+          sizes="(max-width: 980px) 90vw, 50vw"
           loading="lazy"
         />
       </figure>
@@ -55,8 +55,8 @@ const packagingTitle = t(locale, 'packaging.title');
         <Image
           src={greenBento}
           alt="Palm-green DASTUR bento carry-box with dates, luqaimat and machboos."
-          widths={[280, 440]}
-          sizes="200px"
+          widths={[520, 820, 1100]}
+          sizes="(max-width: 980px) 90vw, 50vw"
           loading="lazy"
         />
       </figure>
@@ -64,8 +64,8 @@ const packagingTitle = t(locale, 'packaging.title');
         <Image
           src={kraftBag}
           alt="Kraft DASTUR delivery bag with a palm-green band and heritage skyline."
-          widths={[240, 380]}
-          sizes="170px"
+          widths={[520, 820, 1100]}
+          sizes="(max-width: 980px) 90vw, 50vw"
           loading="lazy"
         />
       </figure>
@@ -91,7 +91,7 @@ const packagingTitle = t(locale, 'packaging.title');
   }
   .pkg__title span {
     display: block;
-    white-space: nowrap;
+    white-space: normal;
   }
   .pkg__body {
     color: var(--on-dark-muted);
@@ -141,7 +141,7 @@ const packagingTitle = t(locale, 'packaging.title');
   .pkg__slide :global(img) {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
   }
   @keyframes pkg-slide {

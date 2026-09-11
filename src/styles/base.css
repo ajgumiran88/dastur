@@ -282,10 +282,6 @@ html.has-custom-cursor button {
   content: '';
   height: 1px;
   flex: 1;
-  background: linear-gradient(
-    to var(--rule-dir, right),
-    transparent,
-    currentColor
-  );
+  background: currentColor;
   opacity: 0.5;
 }

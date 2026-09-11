@@ -12,6 +12,10 @@ const items = tList<{ title: string; desc: string }>(locale, 'why.items');
 
 <Section id="why" theme="light" labelledby="why-title">
   <div class="container why">
+    <div class="why__tagline">
+      <span class="rule-diamond" aria-hidden="true"><Motif name="diamond" /></span>
+      <p>{t(locale, 'footer.tagline')}</p>
+    </div>
     <div class="why__head" data-animate>
       <p class="eyebrow"><Motif name="diamond" />{t(locale, 'why.eyebrow')}</p>
       <h2 id="why-title" class="why__title">{t(locale, 'why.title')}</h2>

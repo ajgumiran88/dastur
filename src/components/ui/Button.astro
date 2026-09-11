@@ -125,15 +125,12 @@ const extra = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
     border-radius: 0;
   }
   .btn--link .btn__label {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-size: 0% 1px;
-    background-position: 0 100%;
-    background-repeat: no-repeat;
+    border-bottom: 1px solid transparent;
     padding-bottom: 2px;
-    transition: background-size var(--dur-2) var(--ease-out);
+    transition: border-color var(--dur-2) var(--ease-out);
   }
   .btn--link:hover .btn__label {
-    background-size: 100% 1px;
+    border-bottom-color: currentColor;
   }
 
   @media (prefers-reduced-motion: reduce) {
